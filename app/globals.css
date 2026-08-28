@@ -1,0 +1,232 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-heading-family);
+  --font-display: var(--font-display-family);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Yatra palette — saffron, Krishna indigo, temple gold, tulsi green */
+  --color-saffron: var(--saffron);
+  --color-saffron-deep: var(--saffron-deep);
+  --color-indigo-krishna: var(--indigo-krishna);
+  --color-indigo-deep: var(--indigo-deep);
+  --color-gold: var(--gold);
+  --color-tulsi: var(--tulsi);
+  --color-lotus: var(--lotus);
+  --color-cream: var(--cream);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(0.985 0.014 82);
+  --foreground: oklch(0.24 0.045 285);
+  --card: oklch(1 0.006 85);
+  --card-foreground: oklch(0.24 0.045 285);
+  --popover: oklch(1 0.006 85);
+  --popover-foreground: oklch(0.24 0.045 285);
+
+  --primary: oklch(0.645 0.192 45);
+  --primary-foreground: oklch(0.995 0.01 85);
+  --secondary: oklch(0.955 0.028 82);
+  --secondary-foreground: oklch(0.36 0.09 282);
+  --muted: oklch(0.955 0.022 85);
+  --muted-foreground: oklch(0.52 0.035 285);
+  --accent: oklch(0.93 0.055 88);
+  --accent-foreground: oklch(0.33 0.085 282);
+  --destructive: oklch(0.577 0.221 27);
+
+  --border: oklch(0.885 0.032 78);
+  --input: oklch(0.885 0.032 78);
+  --ring: oklch(0.645 0.192 45);
+
+  --saffron: oklch(0.7 0.185 52);
+  --saffron-deep: oklch(0.58 0.19 38);
+  --indigo-krishna: oklch(0.42 0.145 278);
+  --indigo-deep: oklch(0.29 0.11 283);
+  --gold: oklch(0.79 0.145 88);
+  --tulsi: oklch(0.56 0.115 155);
+  --lotus: oklch(0.72 0.135 355);
+  --cream: oklch(0.975 0.02 82);
+
+  --chart-1: oklch(0.7 0.185 52);
+  --chart-2: oklch(0.42 0.145 278);
+  --chart-3: oklch(0.79 0.145 88);
+  --chart-4: oklch(0.56 0.115 155);
+  --chart-5: oklch(0.72 0.135 355);
+
+  --radius: 0.75rem;
+
+  --sidebar: oklch(0.975 0.02 82);
+  --sidebar-foreground: oklch(0.24 0.045 285);
+  --sidebar-primary: oklch(0.645 0.192 45);
+  --sidebar-primary-foreground: oklch(0.995 0.01 85);
+  --sidebar-accent: oklch(0.93 0.055 88);
+  --sidebar-accent-foreground: oklch(0.33 0.085 282);
+  --sidebar-border: oklch(0.885 0.032 78);
+  --sidebar-ring: oklch(0.645 0.192 45);
+}
+
+.dark {
+  --background: oklch(0.19 0.035 285);
+  --foreground: oklch(0.955 0.018 84);
+  --card: oklch(0.24 0.042 284);
+  --card-foreground: oklch(0.955 0.018 84);
+  --popover: oklch(0.24 0.042 284);
+  --popover-foreground: oklch(0.955 0.018 84);
+
+  --primary: oklch(0.72 0.175 52);
+  --primary-foreground: oklch(0.2 0.04 285);
+  --secondary: oklch(0.3 0.05 284);
+  --secondary-foreground: oklch(0.955 0.018 84);
+  --muted: oklch(0.29 0.045 284);
+  --muted-foreground: oklch(0.73 0.03 84);
+  --accent: oklch(0.34 0.07 284);
+  --accent-foreground: oklch(0.955 0.018 84);
+  --destructive: oklch(0.704 0.191 22);
+
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.72 0.175 52);
+
+  --saffron: oklch(0.75 0.17 55);
+  --saffron-deep: oklch(0.66 0.18 42);
+  --indigo-krishna: oklch(0.62 0.15 278);
+  --indigo-deep: oklch(0.44 0.13 281);
+  --gold: oklch(0.84 0.135 88);
+  --tulsi: oklch(0.68 0.12 155);
+  --lotus: oklch(0.76 0.13 355);
+  --cream: oklch(0.24 0.042 284);
+
+  --sidebar: oklch(0.24 0.042 284);
+  --sidebar-foreground: oklch(0.955 0.018 84);
+  --sidebar-primary: oklch(0.72 0.175 52);
+  --sidebar-primary-foreground: oklch(0.2 0.04 285);
+  --sidebar-accent: oklch(0.34 0.07 284);
+  --sidebar-accent-foreground: oklch(0.955 0.018 84);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.72 0.175 52);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(ellipse 70% 55% at 12% -8%, color-mix(in oklch, var(--saffron), transparent 86%), transparent),
+      radial-gradient(ellipse 60% 50% at 92% 4%, color-mix(in oklch, var(--indigo-krishna), transparent 90%), transparent);
+    background-attachment: fixed;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  /* Devanagari needs more vertical room than Latin at the same size. */
+  :lang(hi) h1,
+  :lang(hi) h2,
+  :lang(hi) h3 {
+    line-height: 1.35;
+  }
+}
+
+@layer components {
+  /* Repeating temple-arch band used to separate major sections. */
+  .yatra-arch-band {
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--saffron) 0 14px,
+      var(--gold) 14px 28px,
+      var(--indigo-krishna) 28px 42px
+    );
+    mask-image: radial-gradient(circle at 50% 100%, #000 68%, transparent 69%);
+    mask-size: 28px 100%;
+    mask-repeat: repeat-x;
+  }
+
+  .yatra-gradient-text {
+    background-image: linear-gradient(
+      100deg,
+      var(--saffron-deep),
+      var(--saffron) 38%,
+      var(--gold) 72%,
+      var(--saffron-deep)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Soft mandala bloom used behind hero + section headers. */
+  .yatra-mandala {
+    background-image:
+      conic-gradient(
+        from 0deg,
+        color-mix(in oklch, var(--saffron), transparent 84%) 0deg 12deg,
+        transparent 12deg 30deg
+      );
+    mask-image: radial-gradient(circle, #000 0%, transparent 70%);
+  }
+}
+
+@keyframes yatra-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes yatra-spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+.animate-yatra-float { animation: yatra-float 7s ease-in-out infinite; }
+.animate-yatra-spin-slow { animation: yatra-spin-slow 48s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-yatra-float,
+  .animate-yatra-spin-slow {
+    animation: none;
+  }
+}

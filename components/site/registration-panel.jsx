@@ -1,0 +1,91 @@
+"use client";
+
+import Link from "next/link";
+import { ArrowLeft, Mail, Phone, ShieldCheck } from "lucide-react";
+import { LanguageSwitcher } from "@/components/site/language-switcher";
+import { TripCountdown } from "@/components/site/trip-countdown";
+import { RegistrationWizard } from "@/components/registration/registration-wizard";
+import { TRIP } from "@/lib/config";
+import { cn } from "@/lib/utils";
+
+/**
+ * The right-hand column: a single fixed-width container that holds the whole
+ * registration flow, scrolling inside itself so the photographs beside it
+ * never move.
+ *
+ * On a phone it is the second of two views — the back button here is what
+ * swaps it for the carousel again.
+ */
+export function RegistrationPanel({
+  lang,
+  dict,
+  trip,
+  className = "",
+  onBack,
+}) {
+  return (
+    <section
+      className={cn(
+        "flex-col border-saffron/15 bg-background/60 lg:h-full lg:w-[27rem] lg:shrink-0 lg:overflow-y-auto lg:border-l xl:w-[31rem]",
+        className
+      )}
+    >
+      <div className="mx-auto w-full max-w-lg px-4 py-6 sm:px-7 sm:py-8">
+        <div className="mb-5 flex items-center gap-3 lg:hidden">
+          <button
+            type="button"
+            onClick={onBack}
+            className="inline-flex items-center gap-1.5 rounded-full border border-saffron/25 px-3 py-1.5 text-xs font-medium text-saffron-deep transition-colors hover:bg-saffron/8 dark:text-saffron"
+          >
+            <ArrowLeft className="size-3.5" aria-hidden="true" />
+            {dict.home.backToGallery}
+          </button>
+          <LanguageSwitcher
+            lang={lang}
+            label={dict.nav.switchTo}
+            className="ml-auto"
+          />
+        </div>
+
+        <div className="mb-6 rounded-2xl border border-gold/25 bg-card/60 px-4 py-4 backdrop-blur-sm">
+          <TripCountdown
+            targetISO={trip.departureISO}
+            departureLabel={trip.departureDay}
+            labels={dict.countdown}
+          />
+        </div>
+
+        <RegistrationWizard lang={lang} dict={dict} />
+
+        <footer className="mt-8 border-t border-border/60 pt-5 text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <a
+              href={`tel:${TRIP.contactPhone.replace(/\s/g, "")}`}
+              className="inline-flex items-center gap-1.5 transition-colors hover:text-saffron-deep dark:hover:text-saffron"
+            >
+              <Phone className="size-3.5" aria-hidden="true" />
+              {TRIP.contactPhone}
+            </a>
+            <a
+              href={`mailto:${TRIP.contactEmail}`}
+              className="inline-flex items-center gap-1.5 transition-colors hover:text-saffron-deep dark:hover:text-saffron"
+            >
+              <Mail className="size-3.5" aria-hidden="true" />
+              {TRIP.contactEmail}
+            </a>
+            <Link
+              href={`/${lang}/admin`}
+              className="ml-auto inline-flex items-center gap-1.5 transition-colors hover:text-saffron-deep dark:hover:text-saffron"
+            >
+              <ShieldCheck className="size-3.5" aria-hidden="true" />
+              {dict.nav.admin}
+            </Link>
+          </div>
+          <p className="mt-3 leading-relaxed">
+            © {trip.year} {dict.footer.org} · {dict.footer.line}
+          </p>
+        </footer>
+      </div>
+    </section>
+  );
+}
