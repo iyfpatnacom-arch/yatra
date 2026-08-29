@@ -3,6 +3,7 @@
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { HeroCarousel } from "@/components/site/hero-carousel";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
+import { LegalStrip } from "@/components/site/legal-strip";
 import { LotusMark } from "@/components/site/ornaments";
 import { cn } from "@/lib/utils";
 
@@ -116,6 +117,14 @@ export function ShowcasePanel({
         <p className="mt-3 text-center font-heading text-xs leading-relaxed text-saffron-deep/85 dark:text-gold/80">
           {dict.hero.mantra}
         </p>
+        {/* A phone shows this panel first and the form second, so the policy
+            links have to be reachable from here too — not only from the
+            footer of the column behind it. */}
+        <LegalStrip
+          lang={lang}
+          dict={dict}
+          className="mt-5 justify-center border-t border-border/60 pt-4"
+        />
       </div>
     </section>
   );

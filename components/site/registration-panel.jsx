@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowLeft, Mail, Phone, ShieldCheck } from "lucide-react";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { TripCountdown } from "@/components/site/trip-countdown";
+import { HelplineNote } from "@/components/site/helpline-note";
+import { LegalStrip } from "@/components/site/legal-strip";
 import { RegistrationWizard } from "@/components/registration/registration-wizard";
 import { TRIP } from "@/lib/config";
 import { cn } from "@/lib/utils";
@@ -53,6 +55,10 @@ export function RegistrationPanel({
             departureLabel={trip.departureDay}
             labels={dict.countdown}
           />
+          <HelplineNote
+            dict={dict}
+            className="mt-4 border-t border-gold/20 pt-4"
+          />
         </div>
 
         <RegistrationWizard lang={lang} dict={dict} />
@@ -81,9 +87,16 @@ export function RegistrationPanel({
               {dict.nav.admin}
             </Link>
           </div>
+          <LegalStrip
+            lang={lang}
+            dict={dict}
+            className="mt-4 border-t border-border/60 pt-4"
+          />
+
           <p className="mt-3 leading-relaxed">
             © {trip.year} {dict.footer.org} · {dict.footer.line}
           </p>
+          <p className="mt-1.5 leading-relaxed">{dict.footer.securePayments}</p>
         </footer>
       </div>
     </section>

@@ -68,7 +68,13 @@ const clientSchema = z
   .refine((data) => data.type !== "family" || Boolean(data.coach), {
     error: "coach_required",
     path: ["coach"],
-  });
+  })
+  .refine(
+    (data) =>
+      data.type !== "youth" ||
+      data.travellers.every((traveller) => traveller.gender === "male"),
+    { error: "youth_male_only", path: ["travellers", 0, "gender"] }
+  );
 
 const CATEGORY = 0;
 const DETAILS = 1;
@@ -77,13 +83,22 @@ const STEP_KEYS = ["category", "details", "payment"];
 
 function Stepper({ step, labels, onJump }) {
   return (
-    <ol className="flex items-center gap-2">
+    <ol className="flex w-full md:items-center gap-2">
       {STEP_KEYS.map((key, index) => {
         const done = index < step;
         const current = index === step;
 
         return (
-          <li key={key} className="flex min-w-0 flex-1 items-center gap-2">
+          /* Only the items that carry a connector stretch: the last one is a
+             bare circle, and stretching it too left a third of the row empty
+             on a phone, where the labels are hidden. */
+          <li
+            key={key}
+            className={cn(
+              "flex min-w-0 items-center gap-2",
+              index < STEP_KEYS.length - 1 && "flex-1"
+            )}
+          >
             <button
               type="button"
               onClick={done ? () => onJump(index) : undefined}

@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IdProofField } from "@/components/registration/id-proof-field";
-import { GENDER_OPTIONS } from "@/lib/config";
+import { genderOptionsFor } from "@/lib/config";
 import { translateError } from "@/lib/i18n";
 
 /** Walks "travellers.0.name" through the RHF error tree. */
@@ -37,6 +37,8 @@ export function TravellerFields({ index, dict }) {
   const uid = useId();
 
   const base = `travellers.${index}`;
+  const type = useWatch({ control, name: "type" });
+  const genders = genderOptionsFor(type);
   const phone = useWatch({ control, name: `${base}.phone` });
   const whatsapp = useWatch({ control, name: `${base}.whatsapp` });
 
@@ -195,7 +197,7 @@ export function TravellerFields({ index, dict }) {
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                {GENDER_OPTIONS.map((option) => (
+                {genders.map((option) => (
                   <SelectItem key={option} value={option}>
                     {dict.form.genders[option]}
                   </SelectItem>
@@ -204,7 +206,11 @@ export function TravellerFields({ index, dict }) {
             </Select>
           )}
         />
-        <FieldError>{err("gender")}</FieldError>
+        {err("gender") ? (
+          <FieldError>{err("gender")}</FieldError>
+        ) : genders.length === 1 ? (
+          <FieldDescription>{f.genderYouthHint}</FieldDescription>
+        ) : null}
       </Field>
 
       <Field

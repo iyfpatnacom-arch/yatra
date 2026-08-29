@@ -4,7 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { IdCard, Loader2, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { compressImage, formatBytes } from "@/lib/compress-image";
-import { ACCEPTED_ID_PROOF_TYPES, MAX_ID_PROOF_BYTES } from "@/lib/config";
+import {
+  ACCEPTED_ID_PROOF_TYPES,
+  MAX_ID_PROOF_BYTES,
+  MAX_ID_PROOF_KB,
+} from "@/lib/config";
+import { format } from "@/lib/i18n";
 
 /**
  * Uncontrolled-ish file picker wired into react-hook-form through a
@@ -13,6 +18,7 @@ import { ACCEPTED_ID_PROOF_TYPES, MAX_ID_PROOF_BYTES } from "@/lib/config";
  */
 export function IdProofField({ value, onChange, dict, inputId, invalid }) {
   const inputRef = useRef(null);
+  const limitLabel = `${MAX_ID_PROOF_KB} KB`;
   const [preview, setPreview] = useState(null);
   const [busy, setBusy] = useState(false);
   const [localError, setLocalError] = useState(null);
@@ -43,9 +49,13 @@ export function IdProofField({ value, onChange, dict, inputId, invalid }) {
 
     setBusy(true);
     try {
-      const compressed = await compressImage(file);
+      const compressed = await compressImage(file, MAX_ID_PROOF_BYTES);
       if (compressed.size > MAX_ID_PROOF_BYTES) {
-        setLocalError(dict.errors.idproof_size);
+        // The ladder in compressImage bottomed out and the photo still does
+        // not fit — say so with the real number rather than "too large".
+        setLocalError(
+          format(dict.errors.idproof_max, { size: limitLabel })
+        );
         onChange(null);
         return;
       }
@@ -68,7 +78,6 @@ export function IdProofField({ value, onChange, dict, inputId, invalid }) {
         id={inputId}
         type="file"
         accept={ACCEPTED_ID_PROOF_TYPES.join(",")}
-        capture="environment"
         onChange={handleFile}
         className="sr-only"
         aria-invalid={invalid || Boolean(localError) || undefined}
@@ -135,7 +144,7 @@ export function IdProofField({ value, onChange, dict, inputId, invalid }) {
                 : dict.form.fields.idProofCta}
             </span>
             <span className="block text-xs leading-snug text-muted-foreground">
-              {dict.form.fields.idProofHint}
+              {format(dict.form.fields.idProofHint, { size: limitLabel })}
             </span>
           </span>
           <Upload

@@ -1,18 +1,23 @@
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { LotusMark } from "@/components/site/ornaments";
+import { SiteNav } from "@/components/site/site-nav";
 import { Button } from "@/components/ui/button";
 
 /**
- * Header for the pages that sit outside the landing page — status and admin.
+ * Header for the pages that sit outside the landing page — the policy pages,
+ * status and admin.
  *
  * The landing page carries its own brand lockup inside the image panel, so it
- * does not use this.
+ * does not use this; it reaches the same routes through the strip in the
+ * registration column instead.
  */
 export function SiteHeader({ lang, dict }) {
   return (
     <header className="sticky top-0 z-40 border-b border-saffron/15 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-3 px-4 sm:px-6">
+      {/* `relative` anchors the phone menu sheet, which drops out of SiteNav
+          at `top-full` and spans the full width of the bar. */}
+      <div className="relative mx-auto flex h-16 w-full max-w-6xl items-center gap-3 px-4 sm:px-6">
         <Link
           href={`/${lang}`}
           className="group flex min-w-0 items-center gap-2.5"
@@ -30,16 +35,18 @@ export function SiteHeader({ lang, dict }) {
           </span>
         </Link>
 
-        <nav className="ml-auto flex items-center gap-1.5 sm:gap-2">
+        <SiteNav lang={lang} dict={dict} className="ml-auto lg:ml-6" />
+
+        <div className="flex items-center gap-1.5 lg:ml-auto lg:gap-2">
           <LanguageSwitcher lang={lang} label={dict.nav.switchTo} />
           <Button
             render={<Link href={`/${lang}`} />}
             size="sm"
-            className="rounded-full bg-gradient-to-r from-saffron to-saffron-deep shadow-sm hover:from-saffron-deep hover:to-saffron"
+            className="hidden rounded-full bg-gradient-to-r from-saffron to-saffron-deep shadow-sm hover:from-saffron-deep hover:to-saffron sm:inline-flex"
           >
             {dict.nav.register}
           </Button>
-        </nav>
+        </div>
       </div>
     </header>
   );
