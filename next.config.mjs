@@ -12,6 +12,9 @@ const imageHosts = (process.env.NEXT_PUBLIC_IMAGE_HOSTS || "")
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Ships a self-contained server bundle so the VPS never has to run
+  // `npm ci` or `next build` — the host is CPU-starved and both time out.
+  output: "standalone",
   // The MongoDB driver must run as a real Node module, not be bundled.
   serverExternalPackages: ["mongodb"],
 
