@@ -29,7 +29,11 @@ import { Separator } from "@/components/ui/separator";
 import { TravellerFields } from "@/components/registration/traveller-fields";
 import { CoachField } from "@/components/registration/coach-field";
 import { AdvanceSummary } from "@/components/registration/advance-summary";
-import { travellerSchema, emptyTraveller } from "@/lib/schema";
+import {
+  checkFacilitators,
+  newTraveller,
+  travellerSchema,
+} from "@/lib/schema";
 import {
   ACCEPTED_ID_PROOF_TYPES,
   calculateFee,
@@ -69,6 +73,9 @@ const clientSchema = z
     error: "coach_required",
     path: ["coach"],
   })
+  /* The very function the server refines with, so the browser can never let
+     through a facilitator the API is about to reject. */
+  .superRefine(checkFacilitators)
   .refine(
     (data) =>
       data.type !== "youth" ||
@@ -201,7 +208,7 @@ export function RegistrationWizard({ lang, dict }) {
     defaultValues: {
       type: undefined,
       coach: undefined,
-      travellers: [{ ...emptyTraveller }],
+      travellers: [newTraveller()],
     },
   });
 
@@ -234,7 +241,7 @@ export function RegistrationWizard({ lang, dict }) {
       form.reset({
         type: next,
         coach: undefined,
-        travellers: [{ ...emptyTraveller }],
+        travellers: [newTraveller(next)],
       });
       setSubmitError(null);
     }
@@ -444,7 +451,7 @@ export function RegistrationWizard({ lang, dict }) {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => append({ ...emptyTraveller })}
+                    onClick={() => append(newTraveller(type))}
                     disabled={!canAdd}
                     className="h-11 w-full rounded-xl border-dashed border-saffron/45 text-saffron-deep hover:bg-saffron/8 dark:text-saffron"
                   >

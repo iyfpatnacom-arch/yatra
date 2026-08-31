@@ -55,6 +55,7 @@ export function HeroCarousel({
   const touchStartX = useRef(null);
 
   const count = slides.length;
+  const showingPoster = Boolean(slides[active]?.poster);
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -138,7 +139,9 @@ export function HeroCarousel({
               alt={slide.caption}
               fill
               sizes="(min-width: 1024px) 60vw, 100vw"
-              className="object-cover"
+              /* A poster carries its own headline and artwork, so it is fitted
+                 whole rather than cropped to fill the frame. */
+              className={slide.poster ? "object-contain" : "object-cover"}
               {...(index === 0 ? { preload: true } : { loading: "lazy" })}
             />
           ) : (
@@ -148,22 +151,39 @@ export function HeroCarousel({
       ))}
 
       {/* Two scrims, not one: the top keeps the brand legible, the bottom
-          carries the headline and caption over any photograph. */}
+          carries the headline and caption over any photograph. Over a poster
+          the bottom one would be dimming artwork nobody asked us to dim. */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-indigo-deep/70 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-indigo-deep/92 via-indigo-deep/45 to-transparent" />
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-0 bg-gradient-to-t from-indigo-deep/92 via-indigo-deep/45 to-transparent transition-opacity duration-500",
+          showingPoster && "opacity-0"
+        )}
+      />
 
       <div className="relative flex size-full flex-col p-5 sm:p-7 lg:p-9">
         {top}
 
         <div className="mt-auto">
-          {bottom}
-
-          <p
-            key={active}
-            className="mt-5 font-heading text-sm leading-snug text-white/85 drop-shadow sm:text-base"
+          {/* Kept mounted so the page keeps its heading whichever slide is
+              showing, and made inert so nothing reads or reaches a headline
+              that is currently faded out behind a poster. */}
+          <div
+            inert={showingPoster || undefined}
+            className={cn(
+              "transition-opacity duration-500",
+              showingPoster && "pointer-events-none opacity-0"
+            )}
           >
-            {slides[active].caption}
-          </p>
+            {bottom}
+
+            <p
+              key={active}
+              className="mt-5 font-heading text-sm leading-snug text-white/85 drop-shadow sm:text-base"
+            >
+              {slides[active].caption}
+            </p>
+          </div>
 
           {count > 1 ? (
             <div className="mt-4 flex gap-2">

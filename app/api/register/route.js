@@ -88,7 +88,7 @@ export async function POST(request) {
   try {
     await ensureIndexes();
 
-    const orderId = generateOrderId();
+    const orderId = generateOrderId(type);
 
     for (const [index, file] of files.entries()) {
       const buffer = Buffer.from(await file.arrayBuffer());

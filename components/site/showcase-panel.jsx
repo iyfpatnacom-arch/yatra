@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
+import { useMediaQuery } from "@/lib/use-media-query";
 import { HeroCarousel } from "@/components/site/hero-carousel";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { LegalStrip } from "@/components/site/legal-strip";
@@ -29,14 +31,49 @@ export function ShowcasePanel({
   lang,
   dict,
   slides,
+  posters = [],
   trip,
   className = "",
   onRegister,
 }) {
+  /* The posters and the photographs are two different heroes rather than one
+     list styled two ways, so this is one of the few things a Tailwind
+     breakpoint genuinely cannot express. A phone opens on the posters alone —
+     they already carry the dates, the route and the fee, and the scenery was
+     saying it a second time in a place with no room for it. A desktop keeps
+     the photographs here and floats one poster over them instead, at the
+     edge of this column where the form begins.
+
+     The query asks for the desktop rather than the phone on purpose: the
+     server has no viewport and answers `false`, so a phone paints the list it
+     keeps and never fetches a photograph it will not show. */
+  const onDesktop = useMediaQuery("(min-width: 1024px)");
+  const carouselSlides = onDesktop || !posters.length ? slides : posters;
+  const featured = posters[0];
+
   return (
     <section className={cn("relative min-w-0 lg:h-full lg:flex-1", className)}>
+      {/* Desktop only: the poster rides on top of the photographs, pinned to
+          the right edge of this column so it lands directly beside the form
+          without scrolling away inside it. It is inset far enough to leave the
+          carousel's own next-arrow reachable, and passes every event through
+          to the carousel underneath it. */}
+      {featured ? (
+        <div className="pointer-events-none absolute top-1/2 right-16 z-10 hidden -translate-y-1/2 lg:block">
+          <Image
+            src={featured.src}
+            alt={featured.caption}
+            width={1080}
+            height={1350}
+            sizes="22rem"
+            loading="eager"
+            className="h-[60vh] max-h-[32rem] w-auto rounded-2xl object-contain shadow-2xl shadow-black/50 ring-1 ring-gold/40"
+          />
+        </div>
+      ) : null}
+
       <HeroCarousel
-        slides={slides}
+        slides={carouselSlides}
         labels={dict.hero.carousel}
         className="h-[78svh] max-h-[46rem] min-h-[32rem] w-full lg:h-full lg:max-h-none"
         top={
@@ -61,7 +98,7 @@ export function ShowcasePanel({
           </div>
         }
         bottom={
-          <div>
+          <div className="lg:max-w-lg">
             <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/15 px-3.5 py-1.5 text-xs font-medium text-gold backdrop-blur-sm">
               <LotusMark className="w-4" />
               {dict.hero.badge}

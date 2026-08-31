@@ -28,7 +28,7 @@ export function RegistrationPanel({
     <section
       className={cn(
         "flex-col border-saffron/15 bg-background/60 lg:h-full lg:w-[27rem] lg:shrink-0 lg:overflow-y-auto lg:border-l xl:w-[31rem]",
-        className
+        className,
       )}
     >
       <div className="mx-auto w-full max-w-lg px-4 py-6 sm:px-7 sm:py-8">

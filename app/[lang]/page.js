@@ -1,6 +1,6 @@
 import { HomeExperience } from "@/components/site/home-experience";
 import { getDictionary, normalizeLocale } from "@/lib/i18n";
-import { HERO_SLIDES, TRIP } from "@/lib/config";
+import { HERO_SLIDES, TRIP, YATRA_POSTERS } from "@/lib/config";
 
 function localeOf(lang) {
   return lang === "hi" ? "hi-IN" : "en-IN";
@@ -53,6 +53,15 @@ export default async function HomePage({ params }) {
     caption: dict.hero.slides[slide.captionKey] || "",
   }));
 
+  /* Kept apart from the photographs because the two are shown in different
+     places: a phone's carousel is the posters alone, while a desktop holds
+     the first of them above the carousel of photographs. */
+  const posters = YATRA_POSTERS.map((poster) => ({
+    src: poster.src,
+    caption: dict.hero.slides[poster.captionKey] || "",
+    poster: true,
+  }));
+
   /* Dates and the year are formatted here rather than in the client panels:
      the whole page below is a client tree, and an Intl call that runs in two
      places can disagree across a timezone boundary. */
@@ -67,5 +76,13 @@ export default async function HomePage({ params }) {
     year: new Date().getFullYear(),
   };
 
-  return <HomeExperience lang={lang} dict={dict} slides={slides} trip={trip} />;
+  return (
+    <HomeExperience
+      lang={lang}
+      dict={dict}
+      slides={slides}
+      posters={posters}
+      trip={trip}
+    />
+  );
 }

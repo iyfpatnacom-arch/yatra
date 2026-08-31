@@ -8,6 +8,7 @@ import {
   Copy,
   Ban,
   Mail,
+  MessageCircle,
 } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -16,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { PayNowButton } from "@/components/payment/pay-now-button";
 import { getRegistrations } from "@/lib/db";
 import { getDictionary, normalizeLocale } from "@/lib/i18n";
-import { formatINR } from "@/lib/config";
+import { formatINR, groupInviteFor } from "@/lib/config";
 import { isPaymentConfigured } from "@/lib/ccavenue";
 
 export const dynamic = "force-dynamic";
@@ -77,6 +78,7 @@ export default async function StatusPage({ params }) {
     {
       projection: {
         orderId: 1,
+        type: 1,
         amount: 1,
         fee: 1,
         travellerCount: 1,
@@ -98,6 +100,11 @@ export default async function StatusPage({ params }) {
   // Only offer to pay when there is a live gateway to send them to — otherwise
   // the pending copy explains that payment opens later instead.
   const canPay = status !== "success" && isPaymentConfigured();
+
+  /* The group is where the yatra is actually run from, so a confirmed seat is
+     the moment to hand it over — and only then: an unpaid registration has no
+     seat to coordinate yet. */
+  const groupUrl = status === "success" ? groupInviteFor(registration.type) : null;
 
   // "Payment will be enabled shortly" is the wrong thing to say directly above
   // a working Pay button.
@@ -190,6 +197,23 @@ export default async function StatusPage({ params }) {
               <Copy className="size-3" aria-hidden="true" />
               {dict.status.saveNote}
             </p>
+
+            {groupUrl ? (
+              <div className="mt-6">
+                <a
+                  href={groupUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] text-base font-medium text-white shadow-lg shadow-[#25D366]/25 transition-colors hover:bg-[#1da851] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366]"
+                >
+                  <MessageCircle className="size-4" aria-hidden="true" />
+                  {dict.status.joinGroup}
+                </a>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  {dict.status.joinGroupNote}
+                </p>
+              </div>
+            ) : null}
 
             {canPay ? (
               <PayNowButton

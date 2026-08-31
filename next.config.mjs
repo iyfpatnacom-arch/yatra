@@ -5,10 +5,16 @@
  * stops the image optimiser being used as a free proxy for the whole web. Add
  * the host of wherever the yatra photos live, comma separated.
  */
-const imageHosts = (process.env.NEXT_PUBLIC_IMAGE_HOSTS || "")
-  .split(",")
-  .map((host) => host.trim())
-  .filter(Boolean);
+const imageHosts = [
+  // Where the yatra posters in lib/config.js are served from. Listed here
+  // rather than in the env var because those URLs are constants in the code:
+  // a deploy that forgot to set the variable would ship broken posters.
+  "ik.imagekit.io",
+  ...(process.env.NEXT_PUBLIC_IMAGE_HOSTS || "")
+    .split(",")
+    .map((host) => host.trim())
+    .filter(Boolean),
+];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -19,7 +25,7 @@ const nextConfig = {
   serverExternalPackages: ["mongodb"],
 
   images: {
-    remotePatterns: imageHosts.map((hostname) => ({
+    remotePatterns: [...new Set(imageHosts)].map((hostname) => ({
       protocol: "https",
       hostname,
     })),
