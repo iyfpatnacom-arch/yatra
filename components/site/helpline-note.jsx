@@ -1,14 +1,19 @@
-import { Phone } from "lucide-react";
-import { HELPLINES } from "@/lib/config";
+import { Mail, Phone } from "lucide-react";
+import { HELPLINES, TRIP } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
 /**
- * The coordinator numbers, shown directly under the departure countdown.
+ * The coordinator numbers and the yatra mailbox, shown directly under the
+ * departure countdown.
  *
  * Youth and family bookings are run by different coordinators, so the numbers
  * are labelled rather than listed as one row — a family calling the youth
  * coordinator gets bounced, which is exactly the friction this is here to
  * remove.
+ *
+ * This is also the only place a visitor is offered a way to reach a human on
+ * the booking pages, the footer having been reduced to links and the
+ * registered address, so the email belongs here beside the numbers.
  *
  * `tel:` links carry the +91 prefix even though the label does not: a phone
  * dialling a bare 10-digit number from a browser can fail on a SIM roaming
@@ -20,7 +25,7 @@ export function HelplineNote({ dict, className = "" }) {
     { label: dict.countdown.helpFamily, numbers: HELPLINES.family },
   ].filter((group) => group.numbers.length > 0);
 
-  if (!groups.length) return null;
+  if (!groups.length && !TRIP.contactEmail) return null;
 
   return (
     <div className={cn("text-center", className)}>
@@ -47,6 +52,16 @@ export function HelplineNote({ dict, className = "" }) {
           </div>
         ))}
       </dl>
+
+      {TRIP.contactEmail ? (
+        <a
+          href={`mailto:${TRIP.contactEmail}`}
+          className="mt-2 inline-flex items-center gap-1.5 text-sm break-all text-saffron-deep transition-colors hover:underline dark:text-gold"
+        >
+          <Mail className="size-3 shrink-0" aria-hidden="true" />
+          {TRIP.contactEmail}
+        </a>
+      ) : null}
     </div>
   );
 }

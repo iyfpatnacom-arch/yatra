@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { RegistrationForm } from "@/components/registration/registration-form";
 import { FlutePeacockMark, MandalaMark } from "@/components/site/ornaments";
 import { TripCountdown } from "@/components/site/trip-countdown";
+import { HelplineNote } from "@/components/site/helpline-note";
 import { TRIP } from "@/lib/config";
 
 function formatDay(lang, iso) {
@@ -55,6 +56,10 @@ export function RegistrationSection({ mode, lang, dict }) {
             targetISO={`${TRIP.startDate}T${TRIP.departureTime}:00+05:30`}
             departureLabel={formatDay(lang, TRIP.startDate)}
             labels={dict.countdown}
+          />
+          <HelplineNote
+            dict={dict}
+            className="mt-4 border-t border-gold/20 pt-4"
           />
         </div>
 

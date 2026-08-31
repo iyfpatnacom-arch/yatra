@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Mail, Phone, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { TripCountdown } from "@/components/site/trip-countdown";
 import { HelplineNote } from "@/components/site/helpline-note";
 import { LegalStrip } from "@/components/site/legal-strip";
 import { RegistrationWizard } from "@/components/registration/registration-wizard";
-import { TRIP } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
 /**
@@ -65,23 +64,9 @@ export function RegistrationPanel({
 
         <footer className="mt-8 border-t border-border/60 pt-5 text-xs text-muted-foreground">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <a
-              href={`tel:${TRIP.contactPhone.replace(/\s/g, "")}`}
-              className="inline-flex items-center gap-1.5 transition-colors hover:text-saffron-deep dark:hover:text-saffron"
-            >
-              <Phone className="size-3.5" aria-hidden="true" />
-              {TRIP.contactPhone}
-            </a>
-            <a
-              href={`mailto:${TRIP.contactEmail}`}
-              className="inline-flex items-center gap-1.5 transition-colors hover:text-saffron-deep dark:hover:text-saffron"
-            >
-              <Mail className="size-3.5" aria-hidden="true" />
-              {TRIP.contactEmail}
-            </a>
             <Link
               href={`/${lang}/admin`}
-              className="ml-auto inline-flex items-center gap-1.5 transition-colors hover:text-saffron-deep dark:hover:text-saffron"
+              className="inline-flex items-center gap-1.5 transition-colors hover:text-saffron-deep dark:hover:text-saffron"
             >
               <ShieldCheck className="size-3.5" aria-hidden="true" />
               {dict.nav.admin}

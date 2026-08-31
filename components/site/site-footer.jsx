@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Mail, MapPin, Phone, ShieldCheck } from "lucide-react";
+import { MapPin, ShieldCheck } from "lucide-react";
 import { ArchBand, LotusMark } from "@/components/site/ornaments";
 import {
   MAIN_LINKS,
   POLICY_LINKS,
   localised,
 } from "@/components/site/site-links";
-import { HELPLINES, ORG, TRIP } from "@/lib/config";
+import { ORG } from "@/lib/config";
 
 function FooterLink({ href, children }) {
   return (
@@ -22,17 +22,15 @@ function FooterLink({ href, children }) {
 /**
  * Site footer.
  *
- * Carries the four policy documents, the registered address and the
- * coordinator helplines. A payment gateway review looks for exactly these on
- * every page, so the column is not decorative — dropping a link here is what
- * fails an application.
+ * Carries the four policy documents and the registered address. A payment
+ * gateway review looks for exactly these on every page, so the columns are not
+ * decorative — dropping a link here is what fails an application.
+ *
+ * The coordinator numbers and the yatra mailbox are deliberately not repeated
+ * here: they sit under the departure countdown (see HelplineNote) and on the
+ * contact page, which the footer links to.
  */
 export function SiteFooter({ lang, dict }) {
-  const helplines = [
-    { label: dict.countdown.helpYouth, numbers: HELPLINES.youth },
-    { label: dict.countdown.helpFamily, numbers: HELPLINES.family },
-  ];
-
   return (
     <footer className="mt-auto">
       <ArchBand className="rotate-180" />
@@ -101,54 +99,18 @@ export function SiteFooter({ lang, dict }) {
               </ul>
             </div>
 
-            {/* Contact */}
+            {/* Address */}
             <div>
               <h3 className="font-heading text-sm font-semibold tracking-wide text-gold uppercase">
-                {dict.footer.contact}
+                {dict.footer.address}
               </h3>
-              <ul className="mt-3 space-y-2.5 text-sm">
-                <li className="flex gap-2 text-background/70 dark:text-muted-foreground">
-                  <MapPin
-                    className="mt-0.5 size-3.5 shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span className="text-xs leading-relaxed">{ORG.address}</span>
-                </li>
-                <li>
-                  <a
-                    href={`mailto:${TRIP.contactEmail}`}
-                    className="inline-flex items-center gap-2 text-background/80 transition-colors hover:text-gold dark:text-muted-foreground"
-                  >
-                    <Mail className="size-3.5" aria-hidden="true" />
-                    {TRIP.contactEmail}
-                  </a>
-                </li>
-              </ul>
-
-              <h3 className="mt-5 font-heading text-sm font-semibold tracking-wide text-gold uppercase">
-                {dict.footer.helpline}
-              </h3>
-              <ul className="mt-3 space-y-2 text-sm">
-                {helplines.map((group) => (
-                  <li key={group.label}>
-                    <span className="block text-xs text-background/55 dark:text-muted-foreground">
-                      {group.label}
-                    </span>
-                    <span className="mt-0.5 flex flex-wrap gap-x-3 gap-y-1">
-                      {group.numbers.map((number) => (
-                        <a
-                          key={number}
-                          href={`tel:+91${number}`}
-                          className="inline-flex items-center gap-1.5 text-background/80 transition-colors hover:text-gold dark:text-muted-foreground"
-                        >
-                          <Phone className="size-3" aria-hidden="true" />
-                          {number}
-                        </a>
-                      ))}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-3 flex gap-2 text-background/70 dark:text-muted-foreground">
+                <MapPin
+                  className="mt-0.5 size-3.5 shrink-0"
+                  aria-hidden="true"
+                />
+                <span className="text-xs leading-relaxed">{ORG.address}</span>
+              </p>
             </div>
           </div>
 
