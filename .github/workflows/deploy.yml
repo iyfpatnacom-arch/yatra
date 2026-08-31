@@ -34,6 +34,13 @@ jobs:
           node-version: '20'
           cache: npm
 
+      # The lockfiles were authored by npm 11, which records optional native
+      # deps (@emnapi/*) differently to the npm 10 bundled with Node 20.
+      # Without this, `npm ci` fails with "Missing: @emnapi/core from lock file".
+      # Node stays on 20 to match the server's ABI; only npm is upgraded.
+      - name: Pin npm to match the lockfile
+        run: npm install -g npm@11.6.2
+
       - name: Install dependencies
         run: npm ci
 
