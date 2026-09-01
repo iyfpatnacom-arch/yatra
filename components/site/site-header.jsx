@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DonateButton } from "@/components/site/donate-button";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { LotusMark } from "@/components/site/ornaments";
 import { SiteNav } from "@/components/site/site-nav";
@@ -39,6 +40,7 @@ export function SiteHeader({ lang, dict }) {
 
         <div className="flex items-center gap-1.5 lg:ml-auto lg:gap-2">
           <LanguageSwitcher lang={lang} label={dict.nav.switchTo} />
+          <DonateButton label={dict.nav.donate} />
           <Button
             render={<Link href={`/${lang}`} />}
             size="sm"

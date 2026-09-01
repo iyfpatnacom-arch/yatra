@@ -28,7 +28,33 @@ export const POLICY_LINKS = [
   { key: "shipping", href: "/shipping" },
 ];
 
-/** Prefixes a link's href with the active locale: "/privacy" -> "/hi/privacy". */
+/**
+ * Donations are collected on the IYF Patna site, not here, so this is the one
+ * link in the map that leaves the yatra site. It is kept out of MAIN_LINKS
+ * because the surfaces that want it place it deliberately — the header and the
+ * landing page carry it as a button beside the language switcher, and only the
+ * link lists that have no button of their own append it.
+ */
+export const DONATE_LINK = {
+  key: "donate",
+  href: "https://iyfpatna.in/en/donate",
+  external: true,
+};
+
+/**
+ * Prefixes a link's href with the active locale: "/privacy" -> "/hi/privacy".
+ * An absolute URL is somebody else's route and is passed through untouched.
+ */
 export function localised(lang, href) {
+  if (/^https?:\/\//.test(href)) return href;
   return `/${lang}${href}`;
+}
+
+/**
+ * Anchor props for a link that leaves the site, so every surface opens the
+ * donation page the same way. Returns null for our own routes, which spreads
+ * to nothing.
+ */
+export function linkTargetProps(link) {
+  return link.external ? { target: "_blank", rel: "noopener noreferrer" } : null;
 }

@@ -2,16 +2,20 @@ import Link from "next/link";
 import { MapPin, ShieldCheck } from "lucide-react";
 import { ArchBand, LotusMark } from "@/components/site/ornaments";
 import {
+  DONATE_LINK,
   MAIN_LINKS,
   POLICY_LINKS,
+  linkTargetProps,
   localised,
 } from "@/components/site/site-links";
 import { ORG } from "@/lib/config";
 
-function FooterLink({ href, children }) {
+function FooterLink({ href, target, rel, children }) {
   return (
     <Link
       href={href}
+      target={target}
+      rel={rel}
       className="text-background/75 transition-colors hover:text-gold dark:text-muted-foreground dark:hover:text-gold"
     >
       {children}
@@ -64,9 +68,12 @@ export function SiteFooter({ lang, dict }) {
                 {dict.footer.quickLinks}
               </h3>
               <ul className="mt-3 space-y-2 text-sm">
-                {MAIN_LINKS.map((link) => (
+                {[...MAIN_LINKS, DONATE_LINK].map((link) => (
                   <li key={link.key}>
-                    <FooterLink href={localised(lang, link.href)}>
+                    <FooterLink
+                      href={localised(lang, link.href)}
+                      {...linkTargetProps(link)}
+                    >
                       {dict.nav[link.key]}
                     </FooterLink>
                   </li>

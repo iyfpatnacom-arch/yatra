@@ -4,7 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
-import { MAIN_LINKS, POLICY_LINKS, localised } from "@/components/site/site-links";
+import {
+  DONATE_LINK,
+  MAIN_LINKS,
+  POLICY_LINKS,
+  linkTargetProps,
+  localised,
+} from "@/components/site/site-links";
 import { cn } from "@/lib/utils";
 
 /**
@@ -137,10 +143,15 @@ export function SiteNav({ lang, dict, className = "" }) {
           className="absolute inset-x-0 top-full z-50 border-b border-saffron/15 bg-background/98 px-4 pt-2 pb-4 shadow-lg backdrop-blur-md lg:hidden"
         >
           <ul className="mx-auto grid w-full max-w-6xl gap-0.5">
-            {MAIN_LINKS.map((link) => (
+            {/* Donate rides with the main links here rather than in the
+                desktop row, where the header button already carries it. On a
+                phone that button is icon-only, so this is where the word
+                itself appears. */}
+            {[...MAIN_LINKS, DONATE_LINK].map((link) => (
               <li key={link.key}>
                 <Link
                   href={localised(lang, link.href)}
+                  {...linkTargetProps(link)}
                   aria-current={isCurrent(link.href) ? "page" : undefined}
                   className={cn(
                     "block rounded-md px-3 py-2.5 text-sm font-medium transition-colors",

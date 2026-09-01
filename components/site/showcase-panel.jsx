@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { useMediaQuery } from "@/lib/use-media-query";
+import { DonateButton } from "@/components/site/donate-button";
 import { HeroCarousel } from "@/components/site/hero-carousel";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { LegalStrip } from "@/components/site/legal-strip";
@@ -94,6 +95,10 @@ export function ShowcasePanel({
               lang={lang}
               label={dict.nav.switchTo}
               className="ml-auto border-white/25 bg-white/10 text-white hover:border-gold/60 hover:bg-white/20"
+            />
+            <DonateButton
+              label={dict.nav.donate}
+              className="border-gold/45 bg-white/10 text-gold hover:border-gold hover:bg-white/20 dark:text-gold"
             />
           </div>
         }

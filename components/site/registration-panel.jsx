@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
+import { DonateButton } from "@/components/site/donate-button";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { TripCountdown } from "@/components/site/trip-countdown";
 import { HelplineNote } from "@/components/site/helpline-note";
@@ -46,6 +47,7 @@ export function RegistrationPanel({
             label={dict.nav.switchTo}
             className="ml-auto"
           />
+          <DonateButton label={dict.nav.donate} />
         </div>
 
         <div className="mb-6 rounded-md border border-gold/25 bg-card/60 px-4 py-4 backdrop-blur-sm">

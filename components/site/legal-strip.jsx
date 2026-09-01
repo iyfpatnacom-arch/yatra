@@ -1,7 +1,9 @@
 import Link from "next/link";
 import {
+  DONATE_LINK,
   MAIN_LINKS,
   POLICY_LINKS,
+  linkTargetProps,
   localised,
 } from "@/components/site/site-links";
 import { cn } from "@/lib/utils";
@@ -17,6 +19,7 @@ import { cn } from "@/lib/utils";
 export function LegalStrip({ lang, dict, className = "", tone = "light" }) {
   const links = [
     ...MAIN_LINKS.filter((link) => link.href),
+    DONATE_LINK,
     ...POLICY_LINKS,
   ];
 
@@ -32,6 +35,7 @@ export function LegalStrip({ lang, dict, className = "", tone = "light" }) {
         <Link
           key={link.key}
           href={localised(lang, link.href)}
+          {...linkTargetProps(link)}
           className={cn(
             "transition-colors",
             tone === "dark"
