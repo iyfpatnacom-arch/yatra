@@ -273,7 +273,7 @@ export function TravellerFields({ index, dict }) {
             reachable, so picking "Other" asks for the two things the
             coordinator would otherwise have to chase. */}
         {isOtherFacilitator ? (
-          <div className="mt-1 grid gap-4 rounded-xl border border-dashed border-saffron/35 bg-saffron/4 p-3.5 sm:grid-cols-2">
+          <div className="mt-1 grid gap-4 rounded-md border border-dashed border-saffron/35 bg-saffron/4 p-3.5 sm:grid-cols-2">
             <Field data-invalid={Boolean(err("facilitatorName")) || undefined}>
               <FieldLabel htmlFor={`${uid}-facilitator-name`}>
                 {f.facilitatorOtherName}

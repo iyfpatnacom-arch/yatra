@@ -35,7 +35,7 @@ export function TripHighlights({ dict }) {
                 className="group h-full gap-3 border-0 bg-card/80 p-5 ring-1 ring-saffron/12 backdrop-blur-sm transition-all hover:-translate-y-1 hover:ring-saffron/35 hover:shadow-lg hover:shadow-saffron/10"
               >
                 <span
-                  className={`flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br ${ACCENTS[index % ACCENTS.length]}`}
+                  className={`flex size-11 items-center justify-center rounded-md bg-gradient-to-br ${ACCENTS[index % ACCENTS.length]}`}
                 >
                   <Icon className="size-5" aria-hidden="true" />
                 </span>

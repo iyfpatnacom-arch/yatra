@@ -66,7 +66,7 @@ export function SiteNav({ lang, dict, className = "" }) {
             href={localised(lang, link.href)}
             aria-current={isCurrent(link.href) ? "page" : undefined}
             className={cn(
-              "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
+              "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
               isCurrent(link.href)
                 ? "bg-saffron/12 text-saffron-deep dark:text-saffron"
                 : "text-foreground/75 hover:bg-saffron/8 hover:text-saffron-deep dark:hover:text-saffron"
@@ -82,7 +82,7 @@ export function SiteNav({ lang, dict, className = "" }) {
             onClick={() => setOpenPolicies((open) => !open)}
             aria-expanded={openPolicies}
             aria-haspopup="true"
-            className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium text-foreground/75 transition-colors hover:bg-saffron/8 hover:text-saffron-deep dark:hover:text-saffron"
+            className="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-sm font-medium text-foreground/75 transition-colors hover:bg-saffron/8 hover:text-saffron-deep dark:hover:text-saffron"
           >
             {dict.nav.policies}
             <ChevronDown
@@ -95,14 +95,14 @@ export function SiteNav({ lang, dict, className = "" }) {
           </button>
 
           {openPolicies ? (
-            <div className="absolute end-0 top-full z-50 mt-2 w-60 overflow-hidden rounded-xl border border-saffron/20 bg-popover p-1.5 shadow-lg shadow-indigo-deep/10">
+            <div className="absolute end-0 top-full z-50 mt-2 w-60 overflow-hidden rounded-md border border-saffron/20 bg-popover p-1.5 shadow-lg shadow-indigo-deep/10">
               {POLICY_LINKS.map((link) => (
                 <Link
                   key={link.key}
                   href={localised(lang, link.href)}
                   aria-current={isCurrent(link.href) ? "page" : undefined}
                   className={cn(
-                    "block rounded-lg px-3 py-2 text-sm transition-colors",
+                    "block rounded-md px-3 py-2 text-sm transition-colors",
                     isCurrent(link.href)
                       ? "bg-saffron/12 text-saffron-deep dark:text-saffron"
                       : "text-popover-foreground hover:bg-saffron/8"
@@ -122,7 +122,7 @@ export function SiteNav({ lang, dict, className = "" }) {
         onClick={() => setOpenMenu((open) => !open)}
         aria-expanded={openMenu}
         aria-label={openMenu ? dict.nav.closeMenu : dict.nav.menu}
-        className="inline-flex size-9 items-center justify-center rounded-full border border-saffron/25 text-saffron-deep transition-colors hover:bg-saffron/8 lg:hidden dark:text-saffron"
+        className="inline-flex size-9 items-center justify-center rounded-md border border-saffron/25 text-saffron-deep transition-colors hover:bg-saffron/8 lg:hidden dark:text-saffron"
       >
         {openMenu ? (
           <X className="size-4" aria-hidden="true" />
@@ -143,7 +143,7 @@ export function SiteNav({ lang, dict, className = "" }) {
                   href={localised(lang, link.href)}
                   aria-current={isCurrent(link.href) ? "page" : undefined}
                   className={cn(
-                    "block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                    "block rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
                     isCurrent(link.href)
                       ? "bg-saffron/12 text-saffron-deep dark:text-saffron"
                       : "text-foreground/80 hover:bg-saffron/8"
@@ -163,7 +163,7 @@ export function SiteNav({ lang, dict, className = "" }) {
                   href={localised(lang, link.href)}
                   aria-current={isCurrent(link.href) ? "page" : undefined}
                   className={cn(
-                    "block rounded-lg px-3 py-2.5 text-sm transition-colors",
+                    "block rounded-md px-3 py-2.5 text-sm transition-colors",
                     isCurrent(link.href)
                       ? "bg-saffron/12 text-saffron-deep dark:text-saffron"
                       : "text-foreground/70 hover:bg-saffron/8"

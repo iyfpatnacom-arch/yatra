@@ -42,7 +42,7 @@ export function SiteHeader({ lang, dict }) {
           <Button
             render={<Link href={`/${lang}`} />}
             size="sm"
-            className="hidden rounded-full bg-gradient-to-r from-saffron to-saffron-deep shadow-sm hover:from-saffron-deep hover:to-saffron sm:inline-flex"
+            className="hidden rounded-md bg-gradient-to-r from-saffron to-saffron-deep shadow-sm hover:from-saffron-deep hover:to-saffron sm:inline-flex"
           >
             {dict.nav.register}
           </Button>

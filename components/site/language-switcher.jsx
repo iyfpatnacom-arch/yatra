@@ -43,7 +43,7 @@ export function LanguageSwitcher({ lang, label, className = "" }) {
       disabled={isPending}
       aria-label={`Switch language to ${target === "hi" ? "Hindi" : "English"}`}
       className={cn(
-        "gap-1.5 rounded-full border-saffron/40 bg-background/70 backdrop-blur-sm hover:border-saffron",
+        "gap-1.5 rounded-md border-saffron/40 bg-background/70 backdrop-blur-sm hover:border-saffron",
         className
       )}
     >

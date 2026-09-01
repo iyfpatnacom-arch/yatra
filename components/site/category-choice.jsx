@@ -61,7 +61,7 @@ export function CategoryChoice({ lang, dict }) {
               className={`h-full gap-4 border-0 bg-card/85 p-6 ring-1 ring-saffron/12 backdrop-blur-sm transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-saffron/10 ${ring}`}
             >
               <span
-                className={`flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br ${accent}`}
+                className={`flex size-12 items-center justify-center rounded-md bg-gradient-to-br ${accent}`}
               >
                 <Icon className="size-6" aria-hidden="true" />
               </span>
@@ -82,7 +82,7 @@ export function CategoryChoice({ lang, dict }) {
 
               <Button
                 render={<Link href={href} />}
-                className="mt-auto h-11 w-full rounded-xl bg-gradient-to-r from-saffron to-saffron-deep text-base shadow-sm hover:from-saffron-deep hover:to-saffron"
+                className="mt-auto h-11 w-full rounded-md bg-gradient-to-r from-saffron to-saffron-deep text-base shadow-sm hover:from-saffron-deep hover:to-saffron"
               >
                 {copy.cta}
                 <ArrowRight className="size-4" aria-hidden="true" />
@@ -91,7 +91,7 @@ export function CategoryChoice({ lang, dict }) {
           ))}
         </div>
 
-        <p className="mx-auto mt-6 max-w-2xl rounded-xl border border-gold/25 bg-gold/8 px-4 py-3 text-center text-sm text-saffron-deep dark:text-gold">
+        <p className="mx-auto mt-6 max-w-2xl rounded-md border border-gold/25 bg-gold/8 px-4 py-3 text-center text-sm text-saffron-deep dark:text-gold">
           {format(dict.choose.advanceNote, {
             amount: formatINR(ADVANCE_PER_PERSON),
           })}

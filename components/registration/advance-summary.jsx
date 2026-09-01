@@ -17,7 +17,7 @@ export function AdvanceSummary({ dict, type, coach, travellerCount }) {
   const summary = dict.form.summary;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gold/35 bg-gradient-to-br from-gold/12 via-saffron/8 to-transparent">
+    <div className="overflow-hidden rounded-md border border-gold/35 bg-gradient-to-br from-gold/12 via-saffron/8 to-transparent">
       <dl className="space-y-2.5 px-4 py-4 text-sm">
         {coach ? (
           <div className="flex items-center justify-between gap-3">

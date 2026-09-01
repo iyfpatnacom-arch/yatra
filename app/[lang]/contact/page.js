@@ -17,9 +17,9 @@ export async function generateMetadata({ params }) {
 
 function Card({ icon: Icon, heading, children }) {
   return (
-    <section className="rounded-2xl border border-saffron/20 bg-card/60 p-5">
+    <section className="rounded-md border border-saffron/20 bg-card/60 p-5">
       <h2 className="flex items-center gap-2 font-heading text-base font-semibold text-indigo-deep dark:text-foreground">
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-saffron/15 text-saffron-deep dark:text-saffron">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-saffron/15 text-saffron-deep dark:text-saffron">
           <Icon className="size-4" aria-hidden="true" />
         </span>
         {heading}

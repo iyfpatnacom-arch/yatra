@@ -51,7 +51,7 @@ export function RegistrationSection({ mode, lang, dict }) {
           </p>
         </div>
 
-        <div className="mx-auto mt-7 max-w-md rounded-2xl border border-gold/25 bg-card/60 px-4 py-4 backdrop-blur-sm">
+        <div className="mx-auto mt-7 max-w-md rounded-md border border-gold/25 bg-card/60 px-4 py-4 backdrop-blur-sm">
           <TripCountdown
             targetISO={`${TRIP.startDate}T${TRIP.departureTime}:00+05:30`}
             departureLabel={formatDay(lang, TRIP.startDate)}
@@ -70,7 +70,7 @@ export function RegistrationSection({ mode, lang, dict }) {
         <p className="mt-10 text-center">
           <Link
             href={`/${lang}/${other}`}
-            className="inline-flex items-center gap-1.5 rounded-full border border-saffron/25 px-4 py-2 text-sm text-saffron-deep transition-colors hover:bg-saffron/8 dark:text-saffron"
+            className="inline-flex items-center gap-1.5 rounded-md border border-saffron/25 px-4 py-2 text-sm text-saffron-deep transition-colors hover:bg-saffron/8 dark:text-saffron"
           >
             {switchLabel}
             <ArrowRight className="size-3.5" aria-hidden="true" />

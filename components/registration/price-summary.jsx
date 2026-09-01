@@ -20,7 +20,7 @@ export function PriceSummary({ dict, type, coach, travellerCount }) {
   const show = (amount) => (awaitingCoach ? "—" : formatINR(amount));
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gold/35 bg-gradient-to-br from-gold/12 via-saffron/8 to-transparent">
+    <div className="overflow-hidden rounded-md border border-gold/35 bg-gradient-to-br from-gold/12 via-saffron/8 to-transparent">
       <div className="flex items-center gap-2 border-b border-gold/25 px-4 py-3">
         <Ticket className="size-4 text-saffron-deep dark:text-gold" aria-hidden="true" />
         <h3 className="font-heading text-sm font-semibold text-indigo-deep dark:text-foreground">

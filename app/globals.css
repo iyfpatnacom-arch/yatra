@@ -221,12 +221,49 @@
   to { transform: rotate(360deg); }
 }
 
+/* A heartbeat for the WhatsApp CTA on the status page: one soft ring every few
+   seconds, then a rest. The drop shadow is repeated in every step because an
+   animated box-shadow replaces the class-level one outright, and the brand
+   green is spelled out the same way the button spells it. */
+@keyframes yatra-whatsapp-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow:
+      0 10px 15px -3px rgb(37 211 102 / 0.25),
+      0 4px 6px -4px rgb(37 211 102 / 0.25),
+      0 0 0 0 rgb(37 211 102 / 0.5);
+  }
+  40% {
+    transform: scale(1.015);
+    box-shadow:
+      0 10px 15px -3px rgb(37 211 102 / 0.25),
+      0 4px 6px -4px rgb(37 211 102 / 0.25),
+      0 0 0 10px rgb(37 211 102 / 0);
+  }
+  60%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 10px 15px -3px rgb(37 211 102 / 0.25),
+      0 4px 6px -4px rgb(37 211 102 / 0.25),
+      0 0 0 0 rgb(37 211 102 / 0);
+  }
+}
+
 .animate-yatra-float { animation: yatra-float 7s ease-in-out infinite; }
 .animate-yatra-spin-slow { animation: yatra-spin-slow 48s linear infinite; }
+.animate-yatra-whatsapp-pulse {
+  animation: yatra-whatsapp-pulse 3.2s ease-out infinite;
+}
+/* Once the pointer is on the button the nudge has done its job. */
+.animate-yatra-whatsapp-pulse:hover,
+.animate-yatra-whatsapp-pulse:focus-visible {
+  animation: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .animate-yatra-float,
-  .animate-yatra-spin-slow {
+  .animate-yatra-spin-slow,
+  .animate-yatra-whatsapp-pulse {
     animation: none;
   }
 }

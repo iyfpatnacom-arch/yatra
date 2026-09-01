@@ -112,7 +112,7 @@ function Stepper({ step, labels, onJump }) {
               disabled={!done}
               aria-current={current ? "step" : undefined}
               className={cn(
-                "flex min-w-0 items-center gap-2 rounded-full py-1 text-left transition-colors",
+                "flex min-w-0 items-center gap-2 rounded-md py-1 text-left transition-colors",
                 done && "hover:text-saffron-deep dark:hover:text-saffron"
               )}
             >
@@ -162,11 +162,11 @@ function CategoryCard({ icon: Icon, title, blurb, onClick, accent }) {
     <button
       type="button"
       onClick={onClick}
-      className="group/card flex w-full items-center gap-4 rounded-2xl border border-saffron/20 bg-card/80 p-4 text-left shadow-sm backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-saffron/50 hover:shadow-md hover:shadow-saffron/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron"
+      className="group/card flex w-full items-center gap-4 rounded-md border border-saffron/20 bg-card/80 p-4 text-left shadow-sm backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-saffron/50 hover:shadow-md hover:shadow-saffron/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron"
     >
       <span
         className={cn(
-          "flex size-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br",
+          "flex size-12 shrink-0 items-center justify-center rounded-md bg-gradient-to-br",
           accent
         )}
       >
@@ -373,7 +373,7 @@ export function RegistrationWizard({ lang, dict }) {
                 />
               </div>
 
-              <p className="rounded-xl border border-gold/25 bg-gold/8 px-4 py-3 text-sm text-saffron-deep dark:text-gold">
+              <p className="rounded-md border border-gold/25 bg-gold/8 px-4 py-3 text-sm text-saffron-deep dark:text-gold">
                 {format(copy.category.advanceNote, {
                   amount: formatINR(
                     calculateFee({ type: "youth", travellerCount: 1 })
@@ -400,7 +400,7 @@ export function RegistrationWizard({ lang, dict }) {
                   variant="ghost"
                   size="sm"
                   onClick={() => jumpTo(CATEGORY)}
-                  className="shrink-0 rounded-full"
+                  className="shrink-0 rounded-md"
                 >
                   <Pencil className="size-3.5" aria-hidden="true" />
                   {copy.changeCategory}
@@ -410,7 +410,7 @@ export function RegistrationWizard({ lang, dict }) {
               {fields.map((field, index) => (
                 <section
                   key={field.id}
-                  className="rounded-2xl border border-saffron/18 bg-card/80 p-4 shadow-sm backdrop-blur-sm"
+                  className="rounded-md border border-saffron/18 bg-card/80 p-4 shadow-sm backdrop-blur-sm"
                 >
                   <header className="mb-4 flex items-center gap-2.5">
                     <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-saffron/15 text-saffron-deep dark:text-saffron">
@@ -453,7 +453,7 @@ export function RegistrationWizard({ lang, dict }) {
                     variant="outline"
                     onClick={() => append(newTraveller(type))}
                     disabled={!canAdd}
-                    className="h-11 w-full rounded-xl border-dashed border-saffron/45 text-saffron-deep hover:bg-saffron/8 dark:text-saffron"
+                    className="h-11 w-full rounded-md border-dashed border-saffron/45 text-saffron-deep hover:bg-saffron/8 dark:text-saffron"
                   >
                     <Plus className="size-4" aria-hidden="true" />
                     {dict.form.addMember}
@@ -477,7 +477,7 @@ export function RegistrationWizard({ lang, dict }) {
                 type="button"
                 size="lg"
                 onClick={goToPayment}
-                className="h-12 w-full rounded-xl bg-gradient-to-r from-saffron to-saffron-deep text-base shadow-lg shadow-saffron/20 hover:from-saffron-deep hover:to-saffron"
+                className="h-12 w-full rounded-md bg-gradient-to-r from-saffron to-saffron-deep text-base shadow-lg shadow-saffron/20 hover:from-saffron-deep hover:to-saffron"
               >
                 {copy.next}
                 <ArrowRight className="size-4" aria-hidden="true" />
@@ -496,7 +496,7 @@ export function RegistrationWizard({ lang, dict }) {
                 </p>
               </header>
 
-              <div className="rounded-2xl border border-saffron/18 bg-card/80 p-4 backdrop-blur-sm">
+              <div className="rounded-md border border-saffron/18 bg-card/80 p-4 backdrop-blur-sm">
                 <div className="flex items-center gap-2">
                   <h3 className="font-heading text-sm font-semibold text-indigo-deep dark:text-foreground">
                     {isFamily
@@ -508,7 +508,7 @@ export function RegistrationWizard({ lang, dict }) {
                     variant="ghost"
                     size="sm"
                     onClick={() => jumpTo(DETAILS)}
-                    className="ml-auto rounded-full"
+                    className="ml-auto rounded-md"
                   >
                     <Pencil className="size-3.5" aria-hidden="true" />
                     {copy.editDetails}
@@ -543,7 +543,7 @@ export function RegistrationWizard({ lang, dict }) {
                 type="submit"
                 size="lg"
                 disabled={isSubmitting}
-                className="h-12 w-full rounded-xl bg-gradient-to-r from-saffron to-saffron-deep text-base shadow-lg shadow-saffron/20 hover:from-saffron-deep hover:to-saffron"
+                className="h-12 w-full rounded-md bg-gradient-to-r from-saffron to-saffron-deep text-base shadow-lg shadow-saffron/20 hover:from-saffron-deep hover:to-saffron"
               >
                 {isSubmitting ? (
                   <>
@@ -562,7 +562,7 @@ export function RegistrationWizard({ lang, dict }) {
                 variant="ghost"
                 onClick={() => jumpTo(DETAILS)}
                 disabled={isSubmitting}
-                className="h-10 w-full rounded-xl text-muted-foreground"
+                className="h-10 w-full rounded-md text-muted-foreground"
               >
                 <ArrowLeft className="size-3.5" aria-hidden="true" />
                 {copy.back}

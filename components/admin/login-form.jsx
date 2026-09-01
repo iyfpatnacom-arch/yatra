@@ -49,7 +49,7 @@ export function AdminLoginForm({ lang, dict }) {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
       <div className="text-center">
-        <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-saffron/20 to-gold/12 text-saffron-deep dark:text-gold">
+        <span className="mx-auto flex size-14 items-center justify-center rounded-md bg-gradient-to-br from-saffron/20 to-gold/12 text-saffron-deep dark:text-gold">
           <ShieldCheck className="size-7" aria-hidden="true" />
         </span>
         <h1 className="mt-4 font-heading text-2xl font-bold text-indigo-deep dark:text-foreground">
@@ -84,7 +84,7 @@ export function AdminLoginForm({ lang, dict }) {
       <Button
         type="submit"
         disabled={busy}
-        className="h-11 w-full rounded-xl bg-gradient-to-r from-saffron to-saffron-deep text-base"
+        className="h-11 w-full rounded-md bg-gradient-to-r from-saffron to-saffron-deep text-base"
       >
         {busy ? (
           <>

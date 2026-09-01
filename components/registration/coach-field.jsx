@@ -37,7 +37,7 @@ export function CoachField({ dict }) {
   const copy = dict.form.coach;
 
   return (
-    <FieldSet className="rounded-2xl border border-saffron/18 bg-card/80 p-4 shadow-sm backdrop-blur-sm">
+    <FieldSet className="rounded-md border border-saffron/18 bg-card/80 p-4 shadow-sm backdrop-blur-sm">
       <FieldLegend className="font-heading text-base font-semibold text-indigo-deep dark:text-foreground">
         {copy.legend}
       </FieldLegend>
@@ -60,7 +60,7 @@ export function CoachField({ dict }) {
                   key={value}
                   htmlFor={`${uid}-${value}`}
                   data-checked={field.value === value || undefined}
-                  className="flex cursor-pointer items-start gap-3 rounded-xl border border-saffron/20 bg-background/60 p-3.5 transition-colors hover:bg-saffron/6 has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/50 data-checked:border-saffron/60 data-checked:bg-saffron/10"
+                  className="flex cursor-pointer items-start gap-3 rounded-md border border-saffron/20 bg-background/60 p-3.5 transition-colors hover:bg-saffron/6 has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/50 data-checked:border-saffron/60 data-checked:bg-saffron/10"
                 >
                   <RadioGroupItem
                     id={`${uid}-${value}`}

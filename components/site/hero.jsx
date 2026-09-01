@@ -49,8 +49,8 @@ function formatDay(lang, iso) {
 
 function InfoPill({ icon: Icon, label, value }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-saffron/20 bg-card/70 px-4 py-3 backdrop-blur-sm">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-saffron/12 text-saffron-deep dark:text-saffron">
+    <div className="flex items-center gap-3 rounded-md border border-saffron/20 bg-card/70 px-4 py-3 backdrop-blur-sm">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-saffron/12 text-saffron-deep dark:text-saffron">
         <Icon className="size-4" aria-hidden="true" />
       </span>
       <span className="flex min-w-0 flex-col leading-tight">
@@ -85,7 +85,7 @@ export function Hero({ lang, dict }) {
       <div className="relative mx-auto w-full max-w-6xl px-4 pt-10 pb-14 sm:px-6 sm:pt-14 sm:pb-16">
         <div className="grid items-center gap-8 lg:grid-cols-[1.05fr_1fr] lg:gap-12">
           <div className="order-2 flex flex-col items-center text-center lg:order-1 lg:items-start lg:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/12 px-4 py-1.5 text-xs font-medium text-saffron-deep sm:text-sm dark:text-gold">
+            <span className="inline-flex items-center gap-2 rounded-md border border-gold/40 bg-gold/12 px-4 py-1.5 text-xs font-medium text-saffron-deep sm:text-sm dark:text-gold">
               <LotusMark className="w-4" />
               {dict.hero.badge}
             </span>
@@ -103,7 +103,7 @@ export function Hero({ lang, dict }) {
               {dict.hero.tagline}
             </p>
 
-            <div className="mt-7 w-full max-w-md rounded-2xl border border-gold/25 bg-card/60 px-4 py-4 backdrop-blur-sm">
+            <div className="mt-7 w-full max-w-md rounded-md border border-gold/25 bg-card/60 px-4 py-4 backdrop-blur-sm">
               <TripCountdown
                 targetISO={departureISO}
                 departureLabel={departureDay}
@@ -115,7 +115,7 @@ export function Hero({ lang, dict }) {
               <Button
                 render={<Link href={`/${lang}/youth`} />}
                 size="lg"
-                className="h-12 flex-1 rounded-full bg-gradient-to-r from-saffron to-saffron-deep px-6 text-base shadow-lg shadow-saffron/25 hover:from-saffron-deep hover:to-saffron"
+                className="h-12 flex-1 rounded-md bg-gradient-to-r from-saffron to-saffron-deep px-6 text-base shadow-lg shadow-saffron/25 hover:from-saffron-deep hover:to-saffron"
               >
                 {dict.hero.ctaYouth}
                 <ArrowRight className="size-4" aria-hidden="true" />
@@ -124,7 +124,7 @@ export function Hero({ lang, dict }) {
                 render={<Link href={`/${lang}/family`} />}
                 variant="outline"
                 size="lg"
-                className="h-12 flex-1 rounded-full border-indigo-krishna/30 px-6 text-base text-indigo-deep hover:bg-indigo-krishna/8 dark:text-foreground"
+                className="h-12 flex-1 rounded-md border-indigo-krishna/30 px-6 text-base text-indigo-deep hover:bg-indigo-krishna/8 dark:text-foreground"
               >
                 <Users className="size-4" aria-hidden="true" />
                 {dict.hero.ctaFamily}

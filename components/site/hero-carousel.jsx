@@ -212,7 +212,7 @@ export function HeroCarousel({
             type="button"
             onClick={() => take(active - 1)}
             aria-label={labels.prev}
-            className="absolute top-1/2 left-3 flex size-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-white opacity-0 backdrop-blur-sm transition-opacity hover:bg-white/30 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold group-hover:opacity-100"
+            className="absolute top-1/2 left-3 flex size-9 -translate-y-1/2 items-center justify-center rounded-md bg-white/15 text-white opacity-0 backdrop-blur-sm transition-opacity hover:bg-white/30 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold group-hover:opacity-100"
           >
             <ChevronLeft className="size-5" aria-hidden="true" />
           </button>
@@ -220,7 +220,7 @@ export function HeroCarousel({
             type="button"
             onClick={() => take(active + 1)}
             aria-label={labels.next}
-            className="absolute top-1/2 right-3 flex size-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-white opacity-0 backdrop-blur-sm transition-opacity hover:bg-white/30 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold group-hover:opacity-100"
+            className="absolute top-1/2 right-3 flex size-9 -translate-y-1/2 items-center justify-center rounded-md bg-white/15 text-white opacity-0 backdrop-blur-sm transition-opacity hover:bg-white/30 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold group-hover:opacity-100"
           >
             <ChevronRight className="size-5" aria-hidden="true" />
           </button>

@@ -36,7 +36,7 @@ export function RegistrationPanel({
           <button
             type="button"
             onClick={onBack}
-            className="inline-flex items-center gap-1.5 rounded-full border border-saffron/25 px-3 py-1.5 text-xs font-medium text-saffron-deep transition-colors hover:bg-saffron/8 dark:text-saffron"
+            className="inline-flex items-center gap-1.5 rounded-md border border-saffron/25 px-3 py-1.5 text-xs font-medium text-saffron-deep transition-colors hover:bg-saffron/8 dark:text-saffron"
           >
             <ArrowLeft className="size-3.5" aria-hidden="true" />
             {dict.home.backToGallery}
@@ -48,7 +48,7 @@ export function RegistrationPanel({
           />
         </div>
 
-        <div className="mb-6 rounded-2xl border border-gold/25 bg-card/60 px-4 py-4 backdrop-blur-sm">
+        <div className="mb-6 rounded-md border border-gold/25 bg-card/60 px-4 py-4 backdrop-blur-sm">
           <TripCountdown
             targetISO={trip.departureISO}
             departureLabel={trip.departureDay}

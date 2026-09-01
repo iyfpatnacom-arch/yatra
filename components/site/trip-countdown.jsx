@@ -20,7 +20,7 @@ function split(ms) {
 
 function Unit({ value, label }) {
   return (
-    <div className="flex min-w-14 flex-col items-center rounded-xl border border-gold/30 bg-card/80 px-2.5 py-2 backdrop-blur-sm sm:min-w-16 sm:px-3">
+    <div className="flex min-w-14 flex-col items-center rounded-md border border-gold/30 bg-card/80 px-2.5 py-2 backdrop-blur-sm sm:min-w-16 sm:px-3">
       <span className="font-display text-2xl leading-none text-saffron-deep tabular-nums sm:text-3xl dark:text-gold">
         {value === null ? "––" : String(value).padStart(2, "0")}
       </span>

@@ -17,7 +17,7 @@ export default function NotFound() {
         <p className="mt-1 text-lg text-muted-foreground">Page not found</p>
         <Button
           render={<Link href="/hi" />}
-          className="mt-6 h-11 rounded-xl bg-gradient-to-r from-saffron to-saffron-deep px-6"
+          className="mt-6 h-11 rounded-md bg-gradient-to-r from-saffron to-saffron-deep px-6"
         >
           मुख्य पृष्ठ / Home
         </Button>

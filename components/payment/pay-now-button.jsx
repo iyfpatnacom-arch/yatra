@@ -33,7 +33,7 @@ export function PayNowButton({ orderId, lang, dict, label }) {
       onClick={pay}
       disabled={busy}
       size="lg"
-      className="mt-6 h-12 w-full rounded-xl bg-gradient-to-r from-saffron to-saffron-deep text-base shadow-lg shadow-saffron/20 hover:from-saffron-deep hover:to-saffron"
+      className="mt-6 h-12 w-full rounded-md bg-gradient-to-r from-saffron to-saffron-deep text-base shadow-lg shadow-saffron/20 hover:from-saffron-deep hover:to-saffron"
     >
       {busy ? (
         <>

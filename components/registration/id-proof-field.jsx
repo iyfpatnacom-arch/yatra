@@ -84,12 +84,12 @@ export function IdProofField({ value, onChange, dict, inputId, invalid }) {
       />
 
       {value && preview ? (
-        <div className="flex items-center gap-3 rounded-xl border border-tulsi/35 bg-tulsi/6 p-2.5">
+        <div className="flex items-center gap-3 rounded-md border border-tulsi/35 bg-tulsi/6 p-2.5">
           {/* eslint-disable-next-line @next/next/no-img-element -- blob: preview, not a remote asset */}
           <img
             src={preview}
             alt=""
-            className="size-14 shrink-0 rounded-lg object-cover ring-1 ring-border"
+            className="size-14 shrink-0 rounded-md object-cover ring-1 ring-border"
           />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-foreground">
@@ -124,13 +124,13 @@ export function IdProofField({ value, onChange, dict, inputId, invalid }) {
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={busy}
-          className={`flex w-full items-center gap-3 rounded-xl border border-dashed px-3.5 py-3 text-left transition-colors ${
+          className={`flex w-full items-center gap-3 rounded-md border border-dashed px-3.5 py-3 text-left transition-colors ${
             invalid || localError
               ? "border-destructive/60 bg-destructive/5"
               : "border-saffron/40 bg-saffron/4 hover:border-saffron hover:bg-saffron/8"
           }`}
         >
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-saffron/15 text-saffron-deep dark:text-saffron">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-saffron/15 text-saffron-deep dark:text-saffron">
             {busy ? (
               <Loader2 className="size-4 animate-spin" aria-hidden="true" />
             ) : (

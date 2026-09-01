@@ -69,9 +69,9 @@ function StatusBadge({ status, dict }) {
 
 function StatCard({ icon: Icon, label, value, accent }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-saffron/18 bg-card/80 p-4 backdrop-blur-sm">
+    <div className="flex items-center gap-3 rounded-md border border-saffron/18 bg-card/80 p-4 backdrop-blur-sm">
       <span
-        className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${accent}`}
+        className={`flex size-10 shrink-0 items-center justify-center rounded-md ${accent}`}
       >
         <Icon className="size-4.5" aria-hidden="true" />
       </span>
@@ -186,7 +186,7 @@ export function AdminDashboard({ lang, dict }) {
           size="sm"
           onClick={logout}
           disabled={loggingOut}
-          className="rounded-full"
+          className="rounded-md"
         >
           {loggingOut ? (
             <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
@@ -224,7 +224,7 @@ export function AdminDashboard({ lang, dict }) {
         />
       </div>
 
-      <div className="flex flex-col gap-3 rounded-2xl border border-saffron/18 bg-card/80 p-3 backdrop-blur-sm sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-3 rounded-md border border-saffron/18 bg-card/80 p-3 backdrop-blur-sm sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <Search
             className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
@@ -298,14 +298,14 @@ export function AdminDashboard({ lang, dict }) {
               href={`/api/admin/export${queryString ? `?${queryString}` : ""}`}
             />
           }
-          className="h-10 rounded-xl bg-gradient-to-r from-saffron to-saffron-deep"
+          className="h-10 rounded-md bg-gradient-to-r from-saffron to-saffron-deep"
         >
           <Download className="size-4" aria-hidden="true" />
           {dict.admin.downloadCsv}
         </Button>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-saffron/18 bg-card/80 backdrop-blur-sm">
+      <div className="overflow-hidden rounded-md border border-saffron/18 bg-card/80 backdrop-blur-sm">
         {loading && !data ? (
           <p className="flex items-center justify-center gap-2 py-16 text-sm text-muted-foreground">
             <Loader2 className="size-4 animate-spin" aria-hidden="true" />
@@ -454,7 +454,7 @@ export function AdminDashboard({ lang, dict }) {
                     variant="outline"
                     size="sm"
                     onClick={() => setSelected(row)}
-                    className="mt-3 w-full rounded-lg"
+                    className="mt-3 w-full rounded-md"
                   >
                     <Eye className="size-3.5" aria-hidden="true" />
                     {dict.admin.table.view}
@@ -559,7 +559,7 @@ function PaymentPanel({ row, dict, onSynced }) {
   }
 
   return (
-    <section className="rounded-xl border border-indigo-krishna/20 bg-background/60 p-4">
+    <section className="rounded-md border border-indigo-krishna/20 bg-background/60 p-4">
       <h3 className="font-heading text-sm font-semibold text-indigo-krishna">
         {dict.admin.paymentHeading}
       </h3>
@@ -591,7 +591,7 @@ function PaymentPanel({ row, dict, onSynced }) {
       </dl>
 
       {row.amountMismatch ? (
-        <p className="mt-3 flex gap-2 rounded-lg bg-destructive/10 p-2.5 text-xs text-destructive">
+        <p className="mt-3 flex gap-2 rounded-md bg-destructive/10 p-2.5 text-xs text-destructive">
           <AlertTriangle className="size-4 shrink-0" aria-hidden="true" />
           {dict.admin.amountMismatch}
         </p>
@@ -603,7 +603,7 @@ function PaymentPanel({ row, dict, onSynced }) {
         size="sm"
         onClick={sync}
         disabled={syncing}
-        className="mt-3 w-full rounded-lg"
+        className="mt-3 w-full rounded-md"
       >
         {syncing ? (
           <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
@@ -666,7 +666,7 @@ function RegistrationDialog({ row, dict, lang, onClose, onSynced }) {
             {row.travellers.map((traveller, index) => (
               <section
                 key={`${row.orderId}-${index}`}
-                className="rounded-xl border border-saffron/18 bg-background/60 p-4"
+                className="rounded-md border border-saffron/18 bg-background/60 p-4"
               >
                 <h3 className="font-heading text-sm font-semibold text-saffron-deep dark:text-gold">
                   {index === 0
@@ -706,7 +706,7 @@ function RegistrationDialog({ row, dict, lang, onClose, onSynced }) {
                     href={`/api/admin/id-proof/${traveller.idProofFileId}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-3 flex items-center gap-3 rounded-lg border border-indigo-krishna/25 bg-indigo-krishna/6 p-2.5 transition-colors hover:border-indigo-krishna/50"
+                    className="mt-3 flex items-center gap-3 rounded-md border border-indigo-krishna/25 bg-indigo-krishna/6 p-2.5 transition-colors hover:border-indigo-krishna/50"
                   >
                     {/* Loaded through the admin-gated route, so it 404s for
                         anyone without a valid session cookie. */}

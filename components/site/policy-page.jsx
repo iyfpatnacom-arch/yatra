@@ -29,7 +29,7 @@ function ContactBlock({ dict }) {
   ];
 
   return (
-    <div className="mt-4 rounded-xl border border-saffron/20 bg-saffron/4 p-4 sm:p-5">
+    <div className="mt-4 rounded-md border border-saffron/20 bg-saffron/4 p-4 sm:p-5">
       <p className="font-heading text-base font-semibold text-indigo-deep dark:text-foreground">
         {ORG.legalName}
       </p>
@@ -205,7 +205,7 @@ export function PolicyPage({ lang, dict, docKey, children }) {
                 <li key={link.key}>
                   <Link
                     href={localised(lang, link.href)}
-                    className="inline-flex rounded-full border border-saffron/25 px-3.5 py-1.5 text-sm text-saffron-deep transition-colors hover:border-saffron hover:bg-saffron/8 dark:text-saffron"
+                    className="inline-flex rounded-md border border-saffron/25 px-3.5 py-1.5 text-sm text-saffron-deep transition-colors hover:border-saffron hover:bg-saffron/8 dark:text-saffron"
                   >
                     {dict.nav[link.key]}
                   </Link>

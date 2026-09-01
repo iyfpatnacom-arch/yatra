@@ -33,7 +33,7 @@ export default async function AdminLoginPage({ params }) {
           <LanguageSwitcher lang={lang} label={dict.nav.switchTo} />
         </div>
 
-        <div className="rounded-3xl bg-card/90 p-6 shadow-xl shadow-saffron/8 ring-1 ring-saffron/20 backdrop-blur-sm sm:p-8">
+        <div className="rounded-md bg-card/90 p-6 shadow-xl shadow-saffron/8 ring-1 ring-saffron/20 backdrop-blur-sm sm:p-8">
           <AdminLoginForm lang={lang} dict={dict} />
         </div>
       </div>

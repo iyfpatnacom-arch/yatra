@@ -120,125 +120,128 @@ export default async function StatusPage({ params }) {
       <main className="relative flex-1 overflow-hidden">
         <MandalaMark className="pointer-events-none absolute -top-32 left-1/2 w-[32rem] -translate-x-1/2 text-saffron/12" />
 
-        <div className="relative mx-auto w-full max-w-lg px-4 py-16 sm:px-6 sm:py-20">
+        <div className="relative mx-auto w-full max-w-lg px-4 py-16 sm:px-6 sm:py-20 lg:max-w-4xl lg:py-10">
           <div
-            className={`rounded-3xl bg-card/90 p-6 text-center shadow-xl shadow-saffron/8 ring-1 backdrop-blur-sm sm:p-8 ${view.ring}`}
+            className={`rounded-md bg-card/90 p-6 shadow-xl shadow-saffron/8 ring-1 backdrop-blur-sm sm:p-8 lg:p-10 ${view.ring}`}
           >
-            <span
-              className={`mx-auto flex size-16 items-center justify-center rounded-full ${view.bubble}`}
-            >
-              <Icon className="size-8" aria-hidden="true" />
-            </span>
-
-            <h1 className="mt-5 font-heading text-2xl font-bold text-indigo-deep sm:text-3xl dark:text-foreground">
-              {dict.status[titleKey]}
-            </h1>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              {dict.status[bodyKey]}
-            </p>
-
-            <dl className="mt-7 text-left">
-              <Row label={dict.status.orderId} value={registration.orderId} mono />
-              <Row
-                label={dict.status.travellers}
-                value={registration.travellerCount}
-              />
-              {registration.fee?.total ? (
-                <Row
-                  label={dict.status.totalFee}
-                  value={formatINR(registration.fee.total)}
-                />
-              ) : null}
-              <Row
-                label={
-                  status === "success"
-                    ? dict.status.advancePaid
-                    : dict.status.advanceDue
-                }
-                value={formatINR(registration.amount)}
-              />
-              {balanceDue > 0 ? (
-                <Row
-                  label={dict.status.balance}
-                  value={formatINR(balanceDue)}
-                />
-              ) : null}
-              {registration.payment?.trackingId ? (
-                <Row
-                  label={dict.status.paymentRef}
-                  value={registration.payment.trackingId}
-                  mono
-                />
-              ) : null}
-              {registration.payment?.paymentMode ? (
-                <Row
-                  label={dict.status.paymentMode}
-                  value={registration.payment.paymentMode}
-                />
-              ) : null}
-            </dl>
-
-            {balanceDue > 0 ? (
-              <p className="mt-4 rounded-lg bg-gold/10 px-3 py-2 text-xs leading-relaxed text-saffron-deep dark:text-gold">
-                {dict.status.balanceNote}
-              </p>
-            ) : null}
-
-            {/* WhatsApp confirmations are paused; the gateway emails the
-                receipt itself, so that is what the traveller is pointed at. */}
-            {status === "success" ? (
-              <p className="mt-4 flex items-start gap-2 rounded-lg bg-tulsi/10 px-3 py-2.5 text-left text-xs leading-relaxed text-tulsi">
-                <Mail className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-                {dict.status.emailNote}
-              </p>
-            ) : null}
-
-            <p className="mt-4 flex items-center justify-center gap-1.5 rounded-lg bg-saffron/8 px-3 py-2 text-xs text-saffron-deep dark:text-gold">
-              <Copy className="size-3" aria-hidden="true" />
-              {dict.status.saveNote}
-            </p>
-
-            {groupUrl ? (
-              <div className="mt-6">
-                <a
-                  href={groupUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] text-base font-medium text-white shadow-lg shadow-[#25D366]/25 transition-colors hover:bg-[#1da851] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366]"
+            {/* Phones keep the stacked column — a receipt reads fine scrolled.
+                From lg the outcome and its actions move alongside the details
+                so the whole registration is on screen at once. Row/column
+                placement keeps the source order (outcome, details, actions)
+                intact for the stacked layout. */}
+            <div className="lg:grid lg:grid-cols-2 lg:gap-x-10">
+              <div className="text-center lg:col-start-1 lg:row-start-1 lg:text-left">
+                <span
+                  className={`mx-auto flex size-16 items-center justify-center rounded-full lg:mx-0 ${view.bubble}`}
                 >
-                  <MessageCircle className="size-4" aria-hidden="true" />
-                  {dict.status.joinGroup}
-                </a>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  {dict.status.joinGroupNote}
+                  <Icon className="size-8" aria-hidden="true" />
+                </span>
+
+                <h1 className="mt-5 font-heading text-2xl font-bold text-indigo-deep sm:text-3xl dark:text-foreground">
+                  {dict.status[titleKey]}
+                </h1>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {dict.status[bodyKey]}
                 </p>
               </div>
-            ) : null}
 
-            {canPay ? (
-              <PayNowButton
-                orderId={registration.orderId}
-                lang={lang}
-                dict={dict}
-                label={
-                  status === "pending"
-                    ? dict.status.payNow
-                    : dict.status.retryPayment
-                }
-              />
-            ) : null}
+              {/* Spans both rows of the left column so the rule between the two
+                  halves runs the full height of the card. */}
+              <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:border-l lg:border-border/60 lg:pl-10">
+                <dl className="mt-7 text-left lg:mt-0">
+                  <Row
+                    label={dict.status.orderId}
+                    value={registration.orderId}
+                    mono
+                  />
+                  <Row
+                    label={dict.status.travellers}
+                    value={registration.travellerCount}
+                  />
+                  <Row
+                    label={
+                      status === "success"
+                        ? dict.status.advancePaid
+                        : dict.status.advanceDue
+                    }
+                    value={formatINR(registration.amount)}
+                  />
+                  {registration.payment?.trackingId ? (
+                    <Row
+                      label={dict.status.paymentRef}
+                      value={registration.payment.trackingId}
+                      mono
+                    />
+                  ) : null}
+                  {registration.payment?.paymentMode ? (
+                    <Row
+                      label={dict.status.paymentMode}
+                      value={registration.payment.paymentMode}
+                    />
+                  ) : null}
+                </dl>
+                {/* WhatsApp confirmations are paused; the gateway emails the
+                    receipt itself, so that is what the traveller is pointed at. */}
+                {status === "success" ? (
+                  <p className="mt-4 flex items-start gap-2 rounded-md bg-tulsi/10 px-3 py-2.5 text-left text-xs leading-relaxed text-tulsi">
+                    <Mail
+                      className="mt-0.5 size-3.5 shrink-0"
+                      aria-hidden="true"
+                    />
+                    {dict.status.emailNote}
+                  </p>
+                ) : null}
 
-            <Button
-              render={<Link href={`/${lang}`} />}
-              variant="outline"
-              className="mt-6 h-11 w-full rounded-xl"
-            >
-              <ArrowLeft className="size-4" aria-hidden="true" />
-              {dict.status.backHome}
-            </Button>
+                <p className="mt-4 flex items-center justify-center gap-1.5 rounded-md bg-saffron/8 px-3 py-2 text-center text-xs text-saffron-deep dark:text-gold">
+                  <Copy className="size-3 shrink-0" aria-hidden="true" />
+                  {dict.status.saveNote}
+                </p>
+              </div>
+
+              <div className="text-center lg:col-start-1 lg:row-start-2 lg:text-left">
+                {groupUrl ? (
+                  <div className="mt-6">
+                    <a
+                      href={groupUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="animate-yatra-whatsapp-pulse flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#25D366] text-base font-medium text-white shadow-lg shadow-[#25D366]/25 transition-colors hover:bg-[#1da851] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366]"
+                    >
+                      <MessageCircle className="size-4" aria-hidden="true" />
+                      {dict.status.joinGroup}
+                    </a>
+                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                      {dict.status.joinGroupNote}
+                    </p>
+                  </div>
+                ) : null}
+
+                {canPay ? (
+                  <PayNowButton
+                    orderId={registration.orderId}
+                    lang={lang}
+                    dict={dict}
+                    label={
+                      status === "pending"
+                        ? dict.status.payNow
+                        : dict.status.retryPayment
+                    }
+                  />
+                ) : null}
+
+                <Button
+                  render={<Link href={`/${lang}`} />}
+                  variant="outline"
+                  className="mt-6 h-11 w-full rounded-md"
+                >
+                  <ArrowLeft className="size-4" aria-hidden="true" />
+                  {dict.status.backHome}
+                </Button>
+              </div>
+            </div>
           </div>
 
-          <LotusMark className="mx-auto mt-8 w-12 text-saffron/45" />
+          <LotusMark className="mx-auto mt-8 w-12 text-saffron/45 lg:mt-6" />
         </div>
       </main>
 

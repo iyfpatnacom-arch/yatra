@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 function MetaPill({ icon: Icon, label, value }) {
   return (
-    <span className="inline-flex min-w-0 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs text-white/80 backdrop-blur-sm">
+    <span className="inline-flex min-w-0 items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-xs text-white/80 backdrop-blur-sm">
       <Icon className="size-3.5 shrink-0 text-gold" aria-hidden="true" />
       <span className="sr-only">{label}: </span>
       <span className="truncate font-medium text-white">{value}</span>
@@ -67,7 +67,7 @@ export function ShowcasePanel({
             height={1350}
             sizes="22rem"
             loading="eager"
-            className="h-[60vh] max-h-[32rem] w-auto rounded-2xl object-contain shadow-2xl shadow-black/50 ring-1 ring-gold/40"
+            className="h-[60vh] max-h-[32rem] w-auto rounded-md object-contain shadow-2xl shadow-black/50 ring-1 ring-gold/40"
           />
         </div>
       ) : null}
@@ -99,7 +99,7 @@ export function ShowcasePanel({
         }
         bottom={
           <div className="lg:max-w-lg">
-            <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/15 px-3.5 py-1.5 text-xs font-medium text-gold backdrop-blur-sm">
+            <span className="inline-flex items-center gap-2 rounded-md border border-gold/40 bg-gold/15 px-3.5 py-1.5 text-xs font-medium text-gold backdrop-blur-sm">
               <LotusMark className="w-4" />
               {dict.hero.badge}
             </span>
@@ -146,7 +146,7 @@ export function ShowcasePanel({
         <button
           type="button"
           onClick={onRegister}
-          className="flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-saffron to-saffron-deep text-base font-medium text-white shadow-lg shadow-saffron/25 transition-colors hover:from-saffron-deep hover:to-saffron focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron"
+          className="flex h-13 w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-saffron to-saffron-deep text-base font-medium text-white shadow-lg shadow-saffron/25 transition-colors hover:from-saffron-deep hover:to-saffron focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron"
         >
           {dict.home.registerCta}
           <ArrowRight className="size-4" aria-hidden="true" />

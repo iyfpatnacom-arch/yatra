@@ -186,7 +186,7 @@ export function RegistrationForm({ mode, lang, dict }) {
           {fields.map((field, index) => (
             <section
               key={field.id}
-              className="rounded-2xl border border-saffron/18 bg-card/80 p-4 shadow-sm backdrop-blur-sm sm:p-6"
+              className="rounded-md border border-saffron/18 bg-card/80 p-4 shadow-sm backdrop-blur-sm sm:p-6"
             >
               <header className="mb-4 flex items-center gap-2.5">
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-saffron/15 text-saffron-deep dark:text-saffron">
@@ -229,7 +229,7 @@ export function RegistrationForm({ mode, lang, dict }) {
                 variant="outline"
                 onClick={() => append(newTraveller(mode))}
                 disabled={!canAdd}
-                className="h-11 w-full rounded-xl border-dashed border-saffron/45 text-saffron-deep hover:bg-saffron/8 dark:text-saffron"
+                className="h-11 w-full rounded-md border-dashed border-saffron/45 text-saffron-deep hover:bg-saffron/8 dark:text-saffron"
               >
                 <Plus className="size-4" aria-hidden="true" />
                 {dict.form.addMember}
@@ -262,7 +262,7 @@ export function RegistrationForm({ mode, lang, dict }) {
             type="submit"
             size="lg"
             disabled={isSubmitting}
-            className="h-12 w-full rounded-xl bg-gradient-to-r from-saffron to-saffron-deep text-base shadow-lg shadow-saffron/20 hover:from-saffron-deep hover:to-saffron"
+            className="h-12 w-full rounded-md bg-gradient-to-r from-saffron to-saffron-deep text-base shadow-lg shadow-saffron/20 hover:from-saffron-deep hover:to-saffron"
           >
             {isSubmitting ? (
               <>
