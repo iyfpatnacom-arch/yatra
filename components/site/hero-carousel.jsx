@@ -4,11 +4,47 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { LotusMark, MandalaMark } from "@/components/site/ornaments";
+import { imagekitLoader, onImagekit } from "@/lib/image-loader";
 import { cn } from "@/lib/utils";
 import { format } from "@/lib/i18n";
 
 /** Long enough to read a caption before the photograph under it changes. */
 const AUTOPLAY_MS = 5000;
+
+/**
+ * How long to wait for an idle moment before fetching the slides nobody has
+ * asked for yet. Well inside one autoplay tick, so a visitor who just watches
+ * never reaches a slide that has not already been fetched.
+ */
+const PREFETCH_IDLE_MS = 2500;
+
+/**
+ * Whether the browser has been given the go-ahead to fetch every slide.
+ *
+ * Mounting all five at once put five downloads on one connection, and the one
+ * the visitor was actually looking at lost as often as it won — which is what
+ * made the carousel feel slow even on a warm cache. So a first paint fetches
+ * only the slide on screen and the one autoplay will bring in next, and the
+ * rest follow at the first idle moment: well inside one {@link AUTOPLAY_MS}
+ * tick, so nothing is ever reached before it has been fetched.
+ */
+function usePrefetchRest() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const start = () => setReady(true);
+    if (typeof window.requestIdleCallback !== "function") {
+      const timer = setTimeout(start, PREFETCH_IDLE_MS);
+      return () => clearTimeout(timer);
+    }
+    const handle = window.requestIdleCallback(start, {
+      timeout: PREFETCH_IDLE_MS,
+    });
+    return () => window.cancelIdleCallback(handle);
+  }, []);
+
+  return ready;
+}
 
 /** Ornamental stand-in so a slide without a photo still looks deliberate. */
 function PlaceholderSlide({ index }) {
@@ -54,8 +90,16 @@ export function HeroCarousel({
   const [reduceMotion, setReduceMotion] = useState(false);
   const touchStartX = useRef(null);
 
+  const prefetchedRest = usePrefetchRest();
+
   const count = slides.length;
   const showingPoster = Boolean(slides[active]?.poster);
+
+  /* Which slides may fetch. Derived rather than remembered: the answer is
+     "all of them" a couple of seconds in, and until then it is only ever the
+     pair the visitor is about to see. */
+  const warm = (index) =>
+    prefetchedRest || index === active || index === (active + 1) % count;
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -133,16 +177,23 @@ export function HeroCarousel({
             index === active ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
         >
-          {slide.src ? (
+          {slide.src && warm(index) ? (
             <Image
               src={slide.src}
               alt={slide.caption}
               fill
               sizes="(min-width: 1024px) 60vw, 100vw"
+              loader={onImagekit(slide.src) ? imagekitLoader : undefined}
               /* A poster carries its own headline and artwork, so it is fitted
                  whole rather than cropped to fill the frame. */
               className={slide.poster ? "object-contain" : "object-cover"}
-              {...(index === 0 ? { preload: true } : { loading: "lazy" })}
+              /* Every slide sits inside the viewport, so `lazy` bought nothing
+                 and only cost the browser a second look. The ones nobody is
+                 reading fetch straight away but at a priority that keeps them
+                 out of the way of the slide that is on screen. */
+              {...(index === 0
+                ? { preload: true, fetchPriority: "high" }
+                : { loading: "eager", fetchPriority: "low" })}
             />
           ) : (
             <PlaceholderSlide index={index} />

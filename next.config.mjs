@@ -29,6 +29,13 @@ const nextConfig = {
       protocol: "https",
       hostname,
     })),
+    // Every image on the site is a constant that only changes with a deploy,
+    // and this box re-encodes them slowly enough that a visitor feels it. Hold
+    // each optimised variant for a month rather than re-deriving it four-hourly.
+    minimumCacheTTL: 2678400,
+    // One less width to encode, and nothing asks for it: the widest thing on
+    // the page is a 60vw column, so 2048 already covers a 2x laptop display.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
   },
 
   async headers() {

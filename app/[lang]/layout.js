@@ -61,6 +61,13 @@ export default async function LangLayout({ children, params }) {
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
+        {/* The posters are fetched from ImageKit's edge rather than through
+            our own optimiser (see lib/image-loader.js), so the connection to
+            it is opened while the HTML is still being parsed instead of after
+            the first <img> is discovered. React hoists these into <head>.
+            dns-prefetch is the fallback for browsers that ignore preconnect. */}
+        <link rel="preconnect" href="https://ik.imagekit.io" />
+        <link rel="dns-prefetch" href="https://ik.imagekit.io" />
         {children}
         <Toaster position="top-center" richColors closeButton />
       </body>

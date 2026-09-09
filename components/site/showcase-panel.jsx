@@ -8,6 +8,7 @@ import { HeroCarousel } from "@/components/site/hero-carousel";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { LegalStrip } from "@/components/site/legal-strip";
 import { LotusMark } from "@/components/site/ornaments";
+import { imagekitLoader, onImagekit } from "@/lib/image-loader";
 import { cn } from "@/lib/utils";
 
 function MetaPill({ icon: Icon, label, value }) {
@@ -58,9 +59,14 @@ export function ShowcasePanel({
           the right edge of this column so it lands directly beside the form
           without scrolling away inside it. It is inset far enough to leave the
           carousel's own next-arrow reachable, and passes every event through
-          to the carousel underneath it. */}
-      {featured ? (
-        <div className="pointer-events-none absolute top-1/2 right-16 z-10 hidden -translate-y-1/2 lg:block">
+          to the carousel underneath it.
+
+          Left out of the tree on a phone rather than hidden by a breakpoint:
+          `display: none` does not stop a browser fetching an image, and at
+          this width it asked for a second copy of the poster — at a different
+          srcset width, so not even the one the carousel had already got. */}
+      {featured && onDesktop ? (
+        <div className="pointer-events-none absolute top-1/2 right-16 z-10 -translate-y-1/2">
           <Image
             src={featured.src}
             alt={featured.caption}
@@ -68,6 +74,8 @@ export function ShowcasePanel({
             height={1350}
             sizes="22rem"
             loading="eager"
+            fetchPriority="high"
+            loader={onImagekit(featured.src) ? imagekitLoader : undefined}
             className="h-[60vh] max-h-[32rem] w-auto rounded-md object-contain shadow-2xl shadow-black/50 ring-1 ring-gold/40"
           />
         </div>
