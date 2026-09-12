@@ -23,6 +23,12 @@ const nextConfig = {
   output: "standalone",
   // The MongoDB driver must run as a real Node module, not be bundled.
   serverExternalPackages: ["mongodb"],
+  // The receipt reads its logo off disk at runtime, which file tracing cannot
+  // see, and the standalone bundle does not copy public/ on its own. Without
+  // this the VPS silently prints receipts with no logo.
+  outputFileTracingIncludes: {
+    "/api/receipt/*": ["./public/iskcon-logo.*"],
+  },
 
   images: {
     remotePatterns: [...new Set(imageHosts)].map((hostname) => ({

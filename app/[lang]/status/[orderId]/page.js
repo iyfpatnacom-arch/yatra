@@ -15,10 +15,13 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { MandalaMark, LotusMark } from "@/components/site/ornaments";
 import { Button } from "@/components/ui/button";
 import { PayNowButton } from "@/components/payment/pay-now-button";
+import { ReceiptDownload } from "@/components/payment/receipt-download";
 import { getRegistrations } from "@/lib/db";
 import { getDictionary, normalizeLocale } from "@/lib/i18n";
 import { formatINR, groupInviteFor } from "@/lib/config";
 import { isPaymentConfigured } from "@/lib/ccavenue";
+import { receiptUrl } from "@/lib/receipt-token";
+import { receiptFilename } from "@/lib/receipt";
 
 export const dynamic = "force-dynamic";
 
@@ -105,6 +108,11 @@ export default async function StatusPage({ params }) {
      the moment to hand it over — and only then: an unpaid registration has no
      seat to coordinate yet. */
   const groupUrl = status === "success" ? groupInviteFor(registration.type) : null;
+
+  /* Signed here rather than in the client component: the token is an HMAC, and
+     the secret behind it must never reach the browser. */
+  const receipt =
+    status === "success" ? await receiptUrl(registration.orderId) : null;
 
   // "Payment will be enabled shortly" is the wrong thing to say directly above
   // a working Pay button.
@@ -226,6 +234,16 @@ export default async function StatusPage({ params }) {
                         ? dict.status.payNow
                         : dict.status.retryPayment
                     }
+                  />
+                ) : null}
+
+                {receipt ? (
+                  <ReceiptDownload
+                    url={receipt}
+                    filename={receiptFilename(registration)}
+                    auto
+                    label={dict.status.downloadReceipt}
+                    autoNote={dict.status.receiptAutoNote}
                   />
                 ) : null}
 
