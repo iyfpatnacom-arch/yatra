@@ -5,6 +5,7 @@ import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { useMediaQuery } from "@/lib/use-media-query";
 import { DonateButton } from "@/components/site/donate-button";
 import { HeroCarousel } from "@/components/site/hero-carousel";
+import { IskconLogo } from "@/components/site/iskcon-logo";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { LegalStrip } from "@/components/site/legal-strip";
 import { LotusMark } from "@/components/site/ornaments";
@@ -87,9 +88,7 @@ export function ShowcasePanel({
         className="h-[78svh] max-h-[46rem] min-h-[32rem] w-full lg:h-full lg:max-h-none"
         top={
           <div className="flex items-center gap-3">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-saffron to-saffron-deep text-white ring-1 ring-gold/50">
-              <LotusMark className="w-5" />
-            </span>
+            <IskconLogo className="ring-gold/50" />
             <span className="flex min-w-0 flex-col leading-tight">
               <span className="truncate font-heading text-sm font-semibold text-white">
                 {dict.nav.brand}

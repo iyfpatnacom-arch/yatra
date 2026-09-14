@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { DonateButton } from "@/components/site/donate-button";
+import { IskconLogo } from "@/components/site/iskcon-logo";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
-import { LotusMark } from "@/components/site/ornaments";
 import { SiteNav } from "@/components/site/site-nav";
 import { Button } from "@/components/ui/button";
 
@@ -23,9 +23,7 @@ export function SiteHeader({ lang, dict }) {
           href={`/${lang}`}
           className="group flex min-w-0 items-center gap-2.5"
         >
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-saffron to-saffron-deep text-primary-foreground shadow-sm ring-1 ring-gold/40">
-            <LotusMark className="w-5" />
-          </span>
+          <IskconLogo />
           <span className="flex min-w-0 flex-col leading-tight">
             <span className="truncate font-heading text-sm font-semibold text-indigo-deep sm:text-base dark:text-foreground">
               {dict.nav.brand}
