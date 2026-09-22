@@ -518,7 +518,7 @@ function DetailRow({ label, value }) {
 
 /**
  * Payment facts plus the escape hatch for the row that never got a response
- * back from the gateway: ask CCAvenue directly what happened to this order.
+ * back from the gateway: ask Razorpay directly what happened to this order.
  */
 function PaymentPanel({ row, dict, onSynced }) {
   // Mounted with key={row.orderId}, so opening a different registration gets a

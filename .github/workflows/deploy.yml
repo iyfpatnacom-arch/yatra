@@ -47,7 +47,7 @@ jobs:
       # NEXT_PUBLIC_* values are inlined into the client bundle at build time,
       # so they must exist HERE, not just on the server. Without this the
       # build would bake in the dev defaults (localhost, iyfpatna.cloud) and
-      # the CCAvenue redirect URLs would point at a machine that isn't ours.
+      # the Razorpay callback URLs would point at a machine that isn't ours.
       - name: Write build-time environment
         run: |
           printf '%s\n' "${{ secrets.BUILD_ENV }}" > .env.production.local
@@ -79,7 +79,7 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
 
       # --delete keeps the remote free of files dropped from the build, but
-      # .env.production holds the runtime secrets (CCAvenue keys, Mongo URI)
+      # .env.production holds the runtime secrets (Razorpay keys, Mongo URI)
       # and start.sh is written server-side, so both are excluded.
       - name: Upload bundle
         run: |

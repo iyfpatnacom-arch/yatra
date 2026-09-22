@@ -6,7 +6,7 @@ import {
   MAX_MEMBERS,
 } from "@/lib/config";
 import { ensureIndexes, getRegistrations } from "@/lib/db";
-import { isPaymentConfigured } from "@/lib/ccavenue";
+import { isPaymentConfigured } from "@/lib/razorpay";
 import { deleteIdProofs, uploadIdProof } from "@/lib/id-proof";
 import { buildRegistrationDocument, generateOrderId } from "@/lib/registration";
 import { check, clientKey } from "@/lib/rate-limit";
@@ -127,7 +127,7 @@ export async function POST(request) {
         amount: document.amount,
         balanceDue: document.fee.balanceDue,
         travellerCount: document.travellerCount,
-        // The encrypted gateway payload is minted by /api/payment/initiate
+        // The Razorpay order and checkout options are minted by /api/payment/initiate
         // rather than here, so the status page can re-open a payment that was
         // abandoned or declined. This flag just tells the client which way to
         // go next.

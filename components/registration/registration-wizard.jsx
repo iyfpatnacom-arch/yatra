@@ -328,7 +328,9 @@ export function RegistrationWizard({ lang, dict }) {
       if (payment.ok) return;
 
       setRedirecting(false);
-      toast.error(translateError(dict, payment.error));
+      // Closing the checkout is a choice, not an error: the registration is
+      // saved and the status page offers "pay now".
+      if (!payment.cancelled) toast.error(translateError(dict, payment.error));
     }
 
     router.push(`/${lang}/status/${result.orderId}`);

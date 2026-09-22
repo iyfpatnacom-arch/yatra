@@ -19,7 +19,7 @@ import { ReceiptDownload } from "@/components/payment/receipt-download";
 import { getRegistrations } from "@/lib/db";
 import { getDictionary, normalizeLocale } from "@/lib/i18n";
 import { formatINR, groupInviteFor } from "@/lib/config";
-import { isPaymentConfigured } from "@/lib/ccavenue";
+import { isPaymentConfigured } from "@/lib/razorpay";
 import { receiptUrl } from "@/lib/receipt-token";
 import { receiptFilename } from "@/lib/receipt";
 

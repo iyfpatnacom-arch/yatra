@@ -1,22 +1,25 @@
 import { NextResponse } from "next/server";
 import { isAdmin, unauthorized } from "@/lib/require-admin";
-import { isPaymentConfigured } from "@/lib/ccavenue";
-import { getOrderStatus } from "@/lib/ccavenue-api";
-import { recordTrackerResult } from "@/lib/payment-result";
+import { getRegistrations } from "@/lib/db";
+import { getRazorpayConfig, settleOrder } from "@/lib/razorpay";
+import { recordPaymentOutcome } from "@/lib/payment-result";
 
 export const runtime = "nodejs";
 
 /**
- * Asks CCAvenue what actually happened to one order and writes the answer back.
+ * Asks Razorpay what actually happened to one registration and writes the
+ * answer back.
  *
  * This is the fix for the row that says "pending" because the customer's phone
- * died on the bank's 3-D Secure page. The money either moved or it did not, and
- * only CCAvenue knows; the coordinator should never have to decide by eye.
+ * died mid-UPI and the webhook never landed. The money either moved or it did
+ * not, and only Razorpay knows; the coordinator should never have to decide by
+ * eye.
  */
 export async function POST(request) {
   if (!(await isAdmin())) return unauthorized();
 
-  if (!isPaymentConfigured()) {
+  const config = getRazorpayConfig();
+  if (!config) {
     return NextResponse.json(
       { ok: false, error: "payment_unavailable" },
       { status: 503 }
@@ -35,10 +38,30 @@ export async function POST(request) {
     return NextResponse.json({ ok: false, error: "not_found" }, { status: 400 });
   }
 
-  try {
-    const tracker = await getOrderStatus({ orderId });
-    const result = await recordTrackerResult(orderId, tracker);
+  const registrations = await getRegistrations();
+  const registration = await registrations.findOne(
+    { orderId },
+    { projection: { "payment.status": 1, "payment.gatewayOrderId": 1 } }
+  );
+  if (!registration) {
+    return NextResponse.json({ ok: false, error: "not_found" }, { status: 404 });
+  }
 
+  const current = registration.payment?.status || "pending";
+  const gatewayOrderId = registration.payment?.gatewayOrderId;
+
+  // Never reached the checkout, so Razorpay has nothing to say about it.
+  if (!gatewayOrderId) {
+    return NextResponse.json({ ok: true, status: current, changed: false });
+  }
+
+  try {
+    const outcome = await settleOrder(gatewayOrderId, config);
+    if (!outcome) {
+      return NextResponse.json({ ok: true, status: current, changed: false });
+    }
+
+    const result = await recordPaymentOutcome(outcome, { reconciled: true });
     if (!result) {
       return NextResponse.json({ ok: false, error: "not_found" }, { status: 404 });
     }
@@ -47,7 +70,7 @@ export async function POST(request) {
       ok: true,
       status: result.status,
       changed: result.changed,
-      orderStatus: tracker.orderStatus,
+      orderStatus: outcome.raw?.payment?.status || null,
     });
   } catch (error) {
     console.error("[reconcile] failed", error);

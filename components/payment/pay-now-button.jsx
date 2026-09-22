@@ -9,7 +9,7 @@ import { startPayment } from "@/lib/payment-redirect";
 import { translateError } from "@/lib/i18n";
 
 /**
- * Re-opens the CCAvenue billing page for a registration that has not been paid
+ * Re-opens the Razorpay checkout for a registration that has not been paid
  * for — a declined card, a cancelled checkout, a dropped connection. The
  * registration and its ID stay the same; only the payment attempt is new.
  */
@@ -24,7 +24,7 @@ export function PayNowButton({ orderId, lang, dict, label }) {
     if (result.ok) return;
 
     setBusy(false);
-    toast.error(translateError(dict, result.error));
+    if (!result.cancelled) toast.error(translateError(dict, result.error));
   }
 
   return (

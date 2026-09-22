@@ -20,7 +20,7 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Payments (CCAvenue) and WhatsApp (BotBiz)
+## Payments (Razorpay) and WhatsApp (BotBiz)
 
 Both integrations are optional at runtime: with their environment variables
 blank the site still takes registrations, it just skips the payment handoff and
@@ -29,37 +29,43 @@ the messaging. Copy `.env.example` to `.env.local` for the full list.
 ### Payment flow
 
 1. `POST /api/register` saves the registration as `pending` and answers with
-   `next: "payment"` when CCAvenue is configured.
-2. The browser calls `POST /api/payment/initiate`, which encrypts the order
-   server-side and returns the gateway URL plus `encRequest` / `access_code`.
-3. The browser POSTs itself to CCAvenue's billing page and the customer pays
-   there — no card details ever reach this app.
-4. CCAvenue POSTs the encrypted result to `/api/payment/response` (or
-   `/api/payment/cancel`), which decrypts it, verifies the amount and currency
-   against the stored registration, updates the row exactly once, and
-   redirects to `/{lang}/status/{orderId}`. CCAvenue emails the payer their
-   receipt directly, which is what the status page tells them to look for.
+   `next: "payment"` when Razorpay is configured.
+2. The browser calls `POST /api/payment/initiate`, which creates (or reuses) a
+   Razorpay Order for the stored amount and returns the checkout options.
+3. The browser opens Razorpay Standard Checkout and the customer pays there —
+   no card details ever reach this app.
+4. Razorpay POSTs the customer back to `/api/payment/response`, which checks
+   the signature, re-reads the payment from Razorpay's API (capturing it if it
+   is only authorized), verifies the amount and currency against the stored
+   registration, updates the row exactly once, and redirects to
+   `/{lang}/status/{orderId}`. Razorpay emails the payer their receipt.
+5. `/api/payment/webhook` records the same outcome for a customer who paid
+   and never made it back (closed tab, lost signal, UPI app switch).
 
 An unpaid registration can be paid for later from its status page; the
-registration ID never changes.
+registration ID never changes. The Razorpay Order is reused across retries, so
+"pay now" on an order that was actually paid records it instead of charging
+twice.
 
 ### Before this works
 
-- `NEXT_PUBLIC_SITE_URL` must be a public HTTPS origin, and the redirect and
-  cancel URLs under it must be whitelisted in the CCAvenue MARS dashboard.
-  **Payments cannot be exercised against localhost.**
-- `CCAVENUE_ENCRYPTION` must match what the merchant account is provisioned
-  for — `aes128` (the classic MD5/CBC scheme, the default) or `aes256`. A
-  mismatch surfaces as CCAvenue error 10002, not as a decryption error.
-- `CCAVENUE_ENV` defaults to `test`; set it to `production` explicitly.
-- The admin dashboard's "Check with CCAvenue" button uses the server-to-server
-  Status API, which additionally requires this server's public IP to be
-  registered with CCAvenue. It is the recovery path for a payment whose
-  response never made it back to us.
+- `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` from Dashboard → Account & Settings
+  → API Keys. `rzp_test_…` keys take no real money, `rzp_live_…` keys do.
+- `NEXT_PUBLIC_SITE_URL` must be the public HTTPS origin — the checkout's
+  callback URL is built from it.
+- Add a webhook in the Razorpay dashboard for
+  `{NEXT_PUBLIC_SITE_URL}/api/payment/webhook` with `payment.captured`,
+  `payment.failed` and `order.paid`, and put its secret in
+  `RAZORPAY_WEBHOOK_SECRET`. The account is shared with iyfpatna.in; payments
+  that site created are ignored here because their orders carry no yatra
+  registration ID.
+- The admin dashboard's "Check with Razorpay" button re-reads a registration's
+  Razorpay Order and settles whatever payment it holds. It is the recovery path
+  for a payment whose response never made it back to us.
 
 ### WhatsApp — currently paused
 
-`WHATSAPP_ENABLED` is the master switch and it is **off**. CCAvenue already
+`WHATSAPP_ENABLED` is the master switch and it is **off**. Razorpay already
 emails the traveller a receipt on a successful payment, so nothing is sent to
 BotBiz: `sendPaymentConfirmation` returns without contacting the API and
 without recording a failed attempt, and the admin dialog and CSV report those
