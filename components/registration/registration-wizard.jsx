@@ -29,7 +29,9 @@ import { Separator } from "@/components/ui/separator";
 import { TravellerFields } from "@/components/registration/traveller-fields";
 import { CoachField } from "@/components/registration/coach-field";
 import { AdvanceSummary } from "@/components/registration/advance-summary";
+import { AddressField } from "@/components/registration/address-field";
 import {
+  billingAddressSchema,
   checkFacilitators,
   newTraveller,
   travellerSchema,
@@ -64,6 +66,7 @@ const clientSchema = z
   .object({
     type: z.enum(REGISTRATION_TYPES, { error: "type_required" }),
     coach: z.enum(COACH_CLASSES, { error: "coach_required" }).optional(),
+    address: billingAddressSchema,
     travellers: z
       .array(travellerSchema.extend({ idProof: idProofSchema }))
       .min(1, "travellers_min")
@@ -195,10 +198,15 @@ function CategoryCard({ icon: Icon, title, blurb, onClick, accent }) {
  * The step split is what lets the form live in a fixed column beside the
  * photographs — a family of six filling one continuous scroll is what made the
  * single-page version unusable on a phone.
+ *
+ * `initialType` comes from the /youth and /family links: the category is
+ * already known, so the form opens on the details step with it chosen. It can
+ * still be changed from there, in case a link was forwarded to the wrong
+ * person.
  */
-export function RegistrationWizard({ lang, dict }) {
+export function RegistrationWizard({ lang, dict, initialType }) {
   const router = useRouter();
-  const [step, setStep] = useState(CATEGORY);
+  const [step, setStep] = useState(initialType ? DETAILS : CATEGORY);
   const [submitError, setSubmitError] = useState(null);
   const [redirecting, setRedirecting] = useState(false);
 
@@ -206,9 +214,10 @@ export function RegistrationWizard({ lang, dict }) {
     resolver: zodResolver(clientSchema),
     mode: "onTouched",
     defaultValues: {
-      type: undefined,
+      type: initialType,
       coach: undefined,
-      travellers: [newTraveller()],
+      address: "",
+      travellers: [newTraveller(initialType)],
     },
   });
 
@@ -235,12 +244,14 @@ export function RegistrationWizard({ lang, dict }) {
 
   /* Switching category changes how many travellers the form allows, so a real
      change starts from a clean slate rather than carrying half-filled rows
-     across. Re-picking the same category keeps everything that was typed. */
+     across. Re-picking the same category keeps everything that was typed, and
+   the address is kept either way — it belongs to the booking, not the rows. */
   function chooseType(next) {
     if (next !== form.getValues("type")) {
       form.reset({
         type: next,
         coach: undefined,
+        address: form.getValues("address"),
         travellers: [newTraveller(next)],
       });
       setSubmitError(null);
@@ -249,7 +260,9 @@ export function RegistrationWizard({ lang, dict }) {
   }
 
   async function goToPayment() {
-    const valid = await form.trigger("travellers", { shouldFocus: true });
+    const valid = await form.trigger(["travellers", "address"], {
+      shouldFocus: true,
+    });
     if (!valid) {
       setSubmitError(dict.form.fixErrors);
       return;
@@ -272,6 +285,7 @@ export function RegistrationWizard({ lang, dict }) {
       JSON.stringify({
         type: values.type,
         ...(values.type === "family" ? { coach: values.coach } : {}),
+        address: values.address,
         travellers: values.travellers.map(({ idProof, ...rest }) => rest),
       })
     );
@@ -302,8 +316,10 @@ export function RegistrationWizard({ lang, dict }) {
           form.setError(issue.path, { type: "server", message: issue.key });
         }
         if (
-          result.fieldErrors.some((issue) =>
-            String(issue.path).startsWith("travellers")
+          result.fieldErrors.some(
+            (issue) =>
+              String(issue.path).startsWith("travellers") ||
+              issue.path === "address"
           )
         ) {
           setStep(DETAILS);
@@ -338,7 +354,8 @@ export function RegistrationWizard({ lang, dict }) {
 
   function onInvalid() {
     setSubmitError(dict.form.fixErrors);
-    if (form.formState.errors.travellers) setStep(DETAILS);
+    const { errors } = form.formState;
+    if (errors.travellers || errors.address) setStep(DETAILS);
   }
 
   return (
@@ -445,6 +462,7 @@ export function RegistrationWizard({ lang, dict }) {
 
                   <Separator className="mb-5 bg-saffron/15" />
                   <TravellerFields index={index} dict={dict} />
+                  {index === 0 ? <AddressField dict={dict} /> : null}
                 </section>
               ))}
 

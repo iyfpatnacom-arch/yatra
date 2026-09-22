@@ -56,7 +56,7 @@ export async function POST(request) {
     return fail(400, "server_error", toFieldErrors(parsed.error));
   }
 
-  const { type, coach, travellers } = parsed.data;
+  const { type, coach, address, travellers } = parsed.data;
   if (travellers.length > MAX_MEMBERS) return fail(400, "travellers_max");
 
   // Every traveller must arrive with exactly one photo, index-matched to their
@@ -108,6 +108,7 @@ export async function POST(request) {
     const document = buildRegistrationDocument({
       type,
       coach,
+      address,
       travellers,
       idProofFileIds: uploadedIds,
       orderId,

@@ -11,10 +11,18 @@ import { RegistrationPanel } from "@/components/site/registration-panel";
  * floated over them where the two columns meet, and the form in a pinned
  * column on the right that scrolls inside itself. A phone cannot hold both at
  * once, so the same two panels become two views and this component owns which
- * one is showing.
+ * one is showing. A /youth or /family link opens on the form, since the
+ * visitor arrived to register rather than to browse.
  */
-export function HomeExperience({ lang, dict, slides, posters, trip }) {
-  const [showForm, setShowForm] = useState(false);
+export function HomeExperience({
+  lang,
+  dict,
+  slides,
+  posters,
+  trip,
+  initialType,
+}) {
+  const [showForm, setShowForm] = useState(Boolean(initialType));
 
   return (
     <div className="lg:flex lg:h-dvh lg:overflow-hidden">
@@ -32,6 +40,7 @@ export function HomeExperience({ lang, dict, slides, posters, trip }) {
         lang={lang}
         dict={dict}
         trip={trip}
+        initialType={initialType}
         onBack={() => setShowForm(false)}
         className={showForm ? "flex" : "hidden lg:flex"}
       />

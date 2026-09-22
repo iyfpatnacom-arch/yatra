@@ -1,12 +1,13 @@
-import { redirect } from "next/navigation";
+import { HomePage } from "@/components/site/home-page";
 import { normalizeLocale } from "@/lib/i18n";
 
 /**
- * Registration now lives on the landing page, where the category is the first
- * step of the form. This route stays only so links already shared as
- * /hi/family land somewhere sensible.
+ * The link to share with families: /hi/family (or just /family, which the
+ * proxy prefixes with the visitor's language). It is the landing page with the
+ * Family category already chosen, so the form opens straight on the family
+ * details — on a phone too, where it skips the photographs.
  */
 export default async function FamilyRegistrationPage({ params }) {
   const { lang } = await params;
-  redirect(`/${normalizeLocale(lang)}`);
+  return <HomePage lang={normalizeLocale(lang)} initialType="family" />;
 }

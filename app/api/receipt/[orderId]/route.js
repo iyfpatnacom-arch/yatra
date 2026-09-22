@@ -56,6 +56,7 @@ export async function GET(request, { params }) {
         "primary.name": 1,
         "primary.email": 1,
         "primary.phone": 1,
+        address: 1,
         "payment.status": 1,
         "payment.paymentMode": 1,
         "payment.paidAt": 1,

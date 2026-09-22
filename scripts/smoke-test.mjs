@@ -43,7 +43,8 @@ const PAGES = [
   "/en/refund",
   "/en/shipping",
 ];
-const HOME_PAGES = new Set(["/hi", "/en"]);
+// The /youth and /family links are the landing page with a category chosen.
+const HOME_PAGES = new Set(["/hi", "/en", "/en/youth", "/en/family"]);
 
 /* lib/config.js reads NEXT_PUBLIC_* values, which the build took from
    .env.production.local (written from BUILD_ENV in CI). Load the same file so

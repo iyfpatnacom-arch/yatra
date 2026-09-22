@@ -22,6 +22,7 @@ export function RegistrationPanel({
   lang,
   dict,
   trip,
+  initialType,
   className = "",
   onBack,
 }) {
@@ -62,7 +63,7 @@ export function RegistrationPanel({
           />
         </div>
 
-        <RegistrationWizard lang={lang} dict={dict} />
+        <RegistrationWizard lang={lang} dict={dict} initialType={initialType} />
 
         <footer className="mt-8 border-t border-border/60 pt-5 text-xs text-muted-foreground">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">

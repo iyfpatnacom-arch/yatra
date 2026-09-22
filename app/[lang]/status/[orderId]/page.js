@@ -8,7 +8,6 @@ import {
   Copy,
   Ban,
   Mail,
-  MessageCircle,
 } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -16,6 +15,7 @@ import { MandalaMark, LotusMark } from "@/components/site/ornaments";
 import { Button } from "@/components/ui/button";
 import { PayNowButton } from "@/components/payment/pay-now-button";
 import { ReceiptDownload } from "@/components/payment/receipt-download";
+import { JoinGroupButton } from "@/components/payment/join-group-button";
 import { getRegistrations } from "@/lib/db";
 import { getDictionary, normalizeLocale } from "@/lib/i18n";
 import { formatINR, groupInviteFor } from "@/lib/config";
@@ -208,20 +208,13 @@ export default async function StatusPage({ params }) {
 
               <div className="text-center lg:col-start-1 lg:row-start-2 lg:text-left">
                 {groupUrl ? (
-                  <div className="mt-6">
-                    <a
-                      href={groupUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="animate-yatra-whatsapp-pulse flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#25D366] text-base font-medium text-white shadow-lg shadow-[#25D366]/25 transition-colors hover:bg-[#1da851] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366]"
-                    >
-                      <MessageCircle className="size-4" aria-hidden="true" />
-                      {dict.status.joinGroup}
-                    </a>
-                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                      {dict.status.joinGroupNote}
-                    </p>
-                  </div>
+                  <JoinGroupButton
+                    url={groupUrl}
+                    orderId={registration.orderId}
+                    label={dict.status.joinGroup}
+                    note={dict.status.joinGroupNote}
+                    openingLabel={dict.status.joinGroupOpening}
+                  />
                 ) : null}
 
                 {canPay ? (
