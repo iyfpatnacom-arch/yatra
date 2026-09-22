@@ -106,21 +106,22 @@ export function AdminDashboard({ lang, dict }) {
   const [page, setPage] = useState(1);
 
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // The filters + page the rows on screen were fetched for. Loading is simply
+  // "what is on screen is not what was asked for".
+  const [loadedKey, setLoadedKey] = useState(null);
   const [selected, setSelected] = useState(null);
   const [loggingOut, setLoggingOut] = useState(false);
 
-  const requestRef = useRef(0);
-
+  // Any filter change invalidates the current page number, so each one resets
+  // it where it happens rather than in an effect that renders twice.
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 350);
+    if (search === debouncedSearch) return undefined;
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(1);
+    }, 350);
     return () => clearTimeout(timer);
-  }, [search]);
-
-  // Any filter change invalidates the current page number.
-  useEffect(() => {
-    setPage(1);
-  }, [debouncedSearch, type, status]);
+  }, [search, debouncedSearch]);
 
   const queryString = useMemo(() => {
     const params = new URLSearchParams();
@@ -130,32 +131,39 @@ export function AdminDashboard({ lang, dict }) {
     return params.toString();
   }, [debouncedSearch, type, status]);
 
-  const load = useCallback(async () => {
-    const requestId = ++requestRef.current;
-    setLoading(true);
-    try {
-      const params = new URLSearchParams(queryString);
-      params.set("page", String(page));
-      const response = await fetch(`/api/admin/registrations?${params}`);
+  const requestKey = `${queryString}#${page}`;
+  const loading = loadedKey !== requestKey;
 
-      if (response.status === 401) {
-        router.replace(`/${lang}/admin/login`);
-        return;
-      }
-
-      const result = await response.json();
-      // Drop responses from filters the user has already moved past.
-      if (requestId === requestRef.current && result?.ok) setData(result);
-    } catch {
-      if (requestId === requestRef.current) setData(null);
-    } finally {
-      if (requestId === requestRef.current) setLoading(false);
-    }
-  }, [queryString, page, router, lang]);
+  // Bumped after a payment check changes a row, to fetch the same page again.
+  const [reloadTick, setReloadTick] = useState(0);
+  const reload = useCallback(() => setReloadTick((tick) => tick + 1), []);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    // Drops responses from filters the user has already moved past.
+    let current = true;
+    const params = new URLSearchParams(queryString);
+    params.set("page", String(page));
+
+    fetch(`/api/admin/registrations?${params}`)
+      .then(async (response) => {
+        if (response.status === 401) {
+          router.replace(`/${lang}/admin/login`);
+          return;
+        }
+        const result = await response.json();
+        if (current && result?.ok) setData(result);
+      })
+      .catch(() => {
+        if (current) setData(null);
+      })
+      .finally(() => {
+        if (current) setLoadedKey(requestKey);
+      });
+
+    return () => {
+      current = false;
+    };
+  }, [queryString, page, requestKey, reloadTick, router, lang]);
 
   async function logout() {
     setLoggingOut(true);
@@ -240,7 +248,13 @@ export function AdminDashboard({ lang, dict }) {
         </div>
 
         <div className="flex gap-2">
-          <Select value={type} onValueChange={(value) => setType(value ?? "all")}>
+          <Select
+            value={type}
+            onValueChange={(value) => {
+              setType(value ?? "all");
+              setPage(1);
+            }}
+          >
             <SelectTrigger
               className="h-10 flex-1 sm:w-36"
               aria-label={dict.admin.filterType}
@@ -265,7 +279,10 @@ export function AdminDashboard({ lang, dict }) {
 
           <Select
             value={status}
-            onValueChange={(value) => setStatus(value ?? "all")}
+            onValueChange={(value) => {
+              setStatus(value ?? "all");
+              setPage(1);
+            }}
           >
             <SelectTrigger
               className="h-10 flex-1 sm:w-40"
@@ -501,7 +518,7 @@ export function AdminDashboard({ lang, dict }) {
         dict={dict}
         lang={lang}
         onClose={() => setSelected(null)}
-        onSynced={load}
+        onSynced={reload}
       />
     </div>
   );

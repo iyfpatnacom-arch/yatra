@@ -24,11 +24,13 @@ export function IdProofField({ value, onChange, dict, inputId, invalid }) {
   const [localError, setLocalError] = useState(null);
 
   useEffect(() => {
-    if (!value) {
-      setPreview(null);
-      return undefined;
-    }
+    // No file, no preview: the render below checks `value` too, so a stale
+    // (already revoked) URL left in state is never shown.
+    if (!value) return undefined;
     const url = URL.createObjectURL(value);
+    // The blob URL is an external resource tied to this file's lifetime — it
+    // is created and revoked here, and state only mirrors it for the render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPreview(url);
     return () => URL.revokeObjectURL(url);
   }, [value]);
