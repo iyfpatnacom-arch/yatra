@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId } from "react";
+import { useEffect, useId, useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { Lock } from "lucide-react";
 import {
@@ -57,6 +57,32 @@ function GuardedInput({ control, name, filter, ...props }) {
         />
       )}
     />
+  );
+}
+
+/**
+ * An Indian mobile number with "+91" printed in front of the box, so the
+ * visitor types only the ten digits and never adds the code a second time.
+ * maxLength leaves room for a pasted "+91 98765 43210"; filterMobile trims it.
+ */
+function MobileInput({ className, ...props }) {
+  return (
+    <div className="relative">
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-0 flex items-center border-r border-input pr-2.5 pl-3 text-sm text-muted-foreground"
+      >
+        +91
+      </span>
+      <GuardedInput
+        {...props}
+        filter={filterMobile}
+        type="tel"
+        inputMode="numeric"
+        maxLength={16}
+        className={`h-11 pl-14 ${className ?? ""}`}
+      />
+    </div>
   );
 }
 
@@ -159,8 +185,27 @@ export function TravellerFields({ index, dict }) {
     return key ? translateError(dict, key) : null;
   };
 
+  /* Ticked, the WhatsApp number follows the contact number as it is typed.
+     Starts ticked when the two already match, e.g. coming back to this step. */
+  const [sameAsPhone, setSameAsPhone] = useState(
+    () => Boolean(phone) && phone === whatsapp
+  );
+
+  useEffect(() => {
+    if (sameAsPhone && (phone ?? "") !== (whatsapp ?? "")) {
+      setValue(`${base}.whatsapp`, phone ?? "", {
+        shouldValidate: Boolean(phone),
+        shouldDirty: true,
+      });
+    }
+  }, [base, phone, whatsapp, sameAsPhone, setValue]);
+
+  const toggleSameAsPhone = (checked) => {
+    setSameAsPhone(checked);
+    if (!checked) setValue(`${base}.whatsapp`, "", { shouldDirty: true });
+  };
+
   const f = dict.form.fields;
-  const whatsappMatchesPhone = Boolean(phone) && phone === whatsapp;
   const dob = dobBounds();
 
   return (
@@ -203,16 +248,11 @@ export function TravellerFields({ index, dict }) {
 
       <Field data-invalid={Boolean(err("phone")) || undefined}>
         <FieldLabel htmlFor={`${uid}-phone`}>{f.phone}</FieldLabel>
-        <GuardedInput
+        <MobileInput
           control={control}
           name={`${base}.phone`}
-          filter={filterMobile}
           id={`${uid}-phone`}
-          type="tel"
-          inputMode="numeric"
-          maxLength={12}
-          className="h-11"
-          autoComplete="tel"
+          autoComplete="tel-national"
           placeholder={f.phonePlaceholder}
           aria-invalid={Boolean(err("phone")) || undefined}
         />
@@ -220,34 +260,29 @@ export function TravellerFields({ index, dict }) {
       </Field>
 
       <Field data-invalid={Boolean(err("whatsapp")) || undefined}>
-        <div className="flex items-center justify-between gap-2">
-          <FieldLabel htmlFor={`${uid}-whatsapp`}>{f.whatsapp}</FieldLabel>
-          <button
-            type="button"
-            disabled={!phone || whatsappMatchesPhone}
-            onClick={() =>
-              setValue(`${base}.whatsapp`, phone, {
-                shouldValidate: true,
-                shouldDirty: true,
-              })
-            }
-            className="shrink-0 text-xs font-medium text-saffron-deep underline-offset-2 hover:underline disabled:opacity-40 disabled:hover:no-underline dark:text-saffron"
-          >
-            {f.sameAsPhone}
-          </button>
-        </div>
-        <GuardedInput
+        <FieldLabel htmlFor={`${uid}-whatsapp`}>{f.whatsapp}</FieldLabel>
+        <MobileInput
           control={control}
           name={`${base}.whatsapp`}
-          filter={filterMobile}
           id={`${uid}-whatsapp`}
-          type="tel"
-          inputMode="numeric"
-          maxLength={12}
-          className="h-11"
+          readOnly={sameAsPhone}
+          className={sameAsPhone ? "bg-muted/60 text-muted-foreground" : undefined}
           placeholder={f.whatsappPlaceholder}
           aria-invalid={Boolean(err("whatsapp")) || undefined}
         />
+        <label
+          htmlFor={`${uid}-same-as-phone`}
+          className="flex w-fit cursor-pointer items-center gap-2 rounded-md border border-input px-3 py-2 text-sm select-none has-checked:border-saffron/50 has-checked:bg-saffron/8"
+        >
+          <input
+            id={`${uid}-same-as-phone`}
+            type="checkbox"
+            checked={sameAsPhone}
+            onChange={(event) => toggleSameAsPhone(event.target.checked)}
+            className="size-4 cursor-pointer accent-saffron-deep"
+          />
+          {f.sameAsPhone}
+        </label>
         <FieldError>{err("whatsapp")}</FieldError>
       </Field>
 
@@ -295,15 +330,10 @@ export function TravellerFields({ index, dict }) {
               <FieldLabel htmlFor={`${uid}-facilitator-phone`}>
                 {f.facilitatorOtherPhone}
               </FieldLabel>
-              <GuardedInput
+              <MobileInput
                 control={control}
                 name={`${base}.facilitatorPhone`}
-                filter={filterMobile}
                 id={`${uid}-facilitator-phone`}
-                type="tel"
-                inputMode="numeric"
-                maxLength={12}
-                className="h-11"
                 placeholder={f.facilitatorOtherPhonePlaceholder}
                 aria-invalid={Boolean(err("facilitatorPhone")) || undefined}
               />
