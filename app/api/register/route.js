@@ -10,8 +10,25 @@ import { isPaymentConfigured } from "@/lib/razorpay";
 import { deleteIdProofs, uploadIdProof } from "@/lib/id-proof";
 import { buildRegistrationDocument, generateOrderId } from "@/lib/registration";
 import { check, clientKey } from "@/lib/rate-limit";
+import { gateRefusal, registrationGate } from "@/lib/registration-gate";
 
 export const runtime = "nodejs";
+
+/** A refusal response if the admin switches rule this booking out, else null. */
+async function checkGate(travellers) {
+  let gate;
+  try {
+    gate = await registrationGate({ travellers });
+  } catch (error) {
+    console.error("[register] could not read registration settings", error);
+    return fail(500, "server_error");
+  }
+  if (gate.allowed) return null;
+  return NextResponse.json(
+    { ...gateRefusal(gate.reason), fieldErrors: [] },
+    { status: 403 }
+  );
+}
 
 function fail(status, error, fieldErrors = []) {
   return NextResponse.json({ ok: false, error, fieldErrors }, { status });
@@ -37,6 +54,10 @@ export async function POST(request) {
     );
   }
 
+  // Checked before the upload is read, so a closed form costs nothing.
+  const closed = await checkGate(1);
+  if (closed) return closed;
+
   let form;
   try {
     form = await request.formData();
@@ -58,6 +79,12 @@ export async function POST(request) {
 
   const { type, coach, address, travellers } = parsed.data;
   if (travellers.length > MAX_MEMBERS) return fail(400, "travellers_max");
+
+  // Again with the real size: a family of five needs five seats left.
+  if (travellers.length > 1) {
+    const refused = await checkGate(travellers.length);
+    if (refused) return refused;
+  }
 
   // Every traveller must arrive with exactly one photo, index-matched to their
   // position in the payload.

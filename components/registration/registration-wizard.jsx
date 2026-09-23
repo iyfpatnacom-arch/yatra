@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   useFieldArray,
@@ -14,6 +14,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
+  CircleSlash,
   Loader2,
   Pencil,
   Plus,
@@ -192,6 +193,33 @@ function CategoryCard({ icon: Icon, title, blurb, onClick, accent }) {
 }
 
 /**
+ * Shown in place of the form while the admin panel has registrations closed,
+ * full or stopped. The helpline sits just above the wizard, so this does not
+ * repeat it.
+ */
+function ClosedNotice({ reason, copy }) {
+  return (
+    <div
+      role="status"
+      className="rounded-md border border-saffron/25 bg-card/80 px-5 py-8 text-center shadow-sm backdrop-blur-sm"
+    >
+      <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-saffron/15 text-saffron-deep dark:text-saffron">
+        <CircleSlash className="size-6" aria-hidden="true" />
+      </span>
+      <h2 className="mt-4 font-heading text-xl font-semibold text-indigo-deep dark:text-foreground">
+        {copy.title}
+      </h2>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        {copy[reason] || copy.closed}
+      </p>
+      <p className="mt-4 border-t border-border/60 pt-4 text-xs leading-relaxed text-muted-foreground">
+        {copy.registered}
+      </p>
+    </div>
+  );
+}
+
+/**
  * Registration in three moves: who is travelling, their details, then the
  * amount and the gateway.
  *
@@ -209,6 +237,24 @@ export function RegistrationWizard({ lang, dict, initialType }) {
   const [step, setStep] = useState(initialType ? DETAILS : CATEGORY);
   const [submitError, setSubmitError] = useState(null);
   const [redirecting, setRedirecting] = useState(false);
+  // "closed" | "full" | "stopped" once the server says the form is shut.
+  const [closedReason, setClosedReason] = useState(null);
+
+  /* Asked once as the form mounts, so a closed yatra says so before anyone
+     types six travellers' details. Until the answer arrives the form shows as
+     usual; the register route refuses the submit either way. */
+  useEffect(() => {
+    let current = true;
+    fetch("/api/registration-status", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((result) => {
+        if (current && result?.open === false) setClosedReason(result.reason);
+      })
+      .catch(() => {});
+    return () => {
+      current = false;
+    };
+  }, []);
 
   const form = useForm({
     resolver: zodResolver(clientSchema),
@@ -309,6 +355,11 @@ export function RegistrationWizard({ lang, dict, initialType }) {
     const result = await response.json().catch(() => null);
 
     if (!response.ok || !result?.ok) {
+      // Closed while the visitor was filling the form in.
+      if (result?.closed) {
+        setClosedReason(result.closed);
+        return;
+      }
       // Server-side field errors are pushed back onto the exact same paths, and
       // the visitor is returned to the step those fields live on.
       if (Array.isArray(result?.fieldErrors) && result.fieldErrors.length) {
@@ -356,6 +407,10 @@ export function RegistrationWizard({ lang, dict, initialType }) {
     setSubmitError(dict.form.fixErrors);
     const { errors } = form.formState;
     if (errors.travellers || errors.address) setStep(DETAILS);
+  }
+
+  if (closedReason) {
+    return <ClosedNotice reason={closedReason} copy={copy.closed} />;
   }
 
   return (

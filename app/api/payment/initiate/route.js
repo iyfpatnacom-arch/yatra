@@ -10,6 +10,7 @@ import {
 } from "@/lib/razorpay";
 import { recordPaymentOutcome } from "@/lib/payment-result";
 import { check, clientKey } from "@/lib/rate-limit";
+import { gateRefusal, registrationGate } from "@/lib/registration-gate";
 
 export const runtime = "nodejs";
 
@@ -128,6 +129,18 @@ export async function POST(request) {
   try {
     const { order, paid } = await gatewayOrderFor(registration, { lang, config });
     if (paid) return NextResponse.json({ ok: true, redirect: statusPath });
+
+    /* Checked only now that Razorpay has said the order is unpaid: a
+       traveller whose money already moved must reach their status page
+       whatever the switches say. A planned close still lets a pending
+       registration pay; the kill switch and a full limit do not. */
+    const gate = await registrationGate({
+      forPayment: true,
+      travellers: registration.travellerCount || 1,
+    });
+    if (!gate.allowed) {
+      return NextResponse.json(gateRefusal(gate.reason), { status: 403 });
+    }
 
     return NextResponse.json(
       { ok: true, checkout: buildCheckoutOptions(registration, order, { lang, config }) },

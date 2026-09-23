@@ -46,6 +46,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { RegistrationControls } from "@/components/admin/registration-controls";
 import { formatINR, PAYMENT_STATUSES, REGISTRATION_TYPES } from "@/lib/config";
 import { format } from "@/lib/i18n";
 
@@ -204,6 +205,8 @@ export function AdminDashboard({ lang, dict }) {
           {dict.admin.logout}
         </Button>
       </header>
+
+      <RegistrationControls lang={lang} dict={dict} />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard
