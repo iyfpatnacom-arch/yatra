@@ -384,11 +384,13 @@ export function RegistrationWizard({ lang, dict, initialType }) {
       return;
     }
 
-    toast.success(dict.form.successTitle);
+    /* No "registration successful" toast here: the seat is not held until the
+       donation is paid, and saying "successful" a moment before the checkout
+       opens read as if the booking were already done.
 
-    // The registration is saved either way. If the gateway is live we hand the
-    // browser straight over to it; if it is not — or the handoff fails — the
-    // visitor still lands on their status page and can pay from there.
+       The registration is saved either way. If the gateway is live we hand the
+       browser straight over to it; if it is not — or the handoff fails — the
+       visitor still lands on their status page and can pay from there. */
     if (result.next === "payment") {
       setRedirecting(true);
       const payment = await startPayment({ orderId: result.orderId, lang });

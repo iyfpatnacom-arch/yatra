@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { isAdmin, unauthorized } from "@/lib/require-admin";
+import {
+  isAdmin,
+  isMasterAdmin,
+  masterRequired,
+  unauthorized,
+} from "@/lib/require-admin";
 import {
   countPaidSeats,
   getRegistrationSettings,
@@ -21,8 +26,12 @@ async function snapshot() {
   return { ok: true, settings, paid, reason: gate.reason };
 }
 
+/* Both verbs are master-only. Reading is harmless in itself, but the controls
+   card is the only thing that asks for it, and a 403 is what tells it to stay
+   locked. */
 export async function GET() {
   if (!(await isAdmin())) return unauthorized();
+  if (!(await isMasterAdmin())) return masterRequired();
   return NextResponse.json(await snapshot());
 }
 
@@ -32,6 +41,7 @@ export async function GET() {
  */
 export async function PUT(request) {
   if (!(await isAdmin())) return unauthorized();
+  if (!(await isMasterAdmin())) return masterRequired();
 
   let body;
   try {
