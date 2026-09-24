@@ -47,7 +47,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { RegistrationControls } from "@/components/admin/registration-controls";
-import { formatINR, PAYMENT_STATUSES, REGISTRATION_TYPES } from "@/lib/config";
+import {
+  ALL_FACILITATOR_VALUES,
+  facilitatorOptionsFor,
+  formatINR,
+  OTHER_FACILITATOR,
+  PAYMENT_STATUSES,
+  REGISTRATION_TYPES,
+} from "@/lib/config";
 import { format } from "@/lib/i18n";
 
 const STATUS_STYLES = {
@@ -86,6 +93,19 @@ function StatCard({ icon: Icon, label, value, accent }) {
   );
 }
 
+/**
+ * The facilitator list the filter offers for the category currently selected:
+ * the youth and family wings have different counselling teams, and only "All
+ * categories" has reason to show both at once.
+ */
+function facilitatorsFor(type) {
+  return type === "all" ? ALL_FACILITATOR_VALUES : facilitatorOptionsFor(type);
+}
+
+function facilitatorLabel(value, dict) {
+  return value === OTHER_FACILITATOR ? dict.admin.facilitatorOther : value;
+}
+
 function formatDate(value, lang) {
   if (!value) return "—";
   return new Intl.DateTimeFormat(lang === "hi" ? "hi-IN" : "en-IN", {
@@ -104,6 +124,7 @@ export function AdminDashboard({ lang, dict }) {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [type, setType] = useState("all");
   const [status, setStatus] = useState("all");
+  const [facilitator, setFacilitator] = useState("all");
   const [page, setPage] = useState(1);
 
   const [data, setData] = useState(null);
@@ -129,8 +150,9 @@ export function AdminDashboard({ lang, dict }) {
     if (debouncedSearch.trim()) params.set("q", debouncedSearch.trim());
     if (type !== "all") params.set("type", type);
     if (status !== "all") params.set("status", status);
+    if (facilitator !== "all") params.set("facilitator", facilitator);
     return params.toString();
-  }, [debouncedSearch, type, status]);
+  }, [debouncedSearch, type, status, facilitator]);
 
   const requestKey = `${queryString}#${page}`;
   const loading = loadedKey !== requestKey;
@@ -250,16 +272,24 @@ export function AdminDashboard({ lang, dict }) {
           />
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Select
             value={type}
             onValueChange={(value) => {
-              setType(value ?? "all");
+              const next = value ?? "all";
+              setType(next);
+              // A facilitator picked while looking at every category may not
+              // counsel the wing just chosen, which would filter to nothing.
+              setFacilitator((current) =>
+                current === "all" || facilitatorsFor(next).includes(current)
+                  ? current
+                  : "all"
+              );
               setPage(1);
             }}
           >
             <SelectTrigger
-              className="h-10 flex-1 sm:w-36"
+              className="h-10 min-w-32 flex-1 sm:w-36"
               aria-label={dict.admin.filterType}
             >
               <SelectValue>
@@ -288,7 +318,7 @@ export function AdminDashboard({ lang, dict }) {
             }}
           >
             <SelectTrigger
-              className="h-10 flex-1 sm:w-40"
+              className="h-10 min-w-36 flex-1 sm:w-40"
               aria-label={dict.admin.filterStatus}
             >
               <SelectValue>
@@ -304,6 +334,35 @@ export function AdminDashboard({ lang, dict }) {
               {PAYMENT_STATUSES.map((option) => (
                 <SelectItem key={option} value={option}>
                   {dict.admin.statuses[option]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={facilitator}
+            onValueChange={(value) => {
+              setFacilitator(value ?? "all");
+              setPage(1);
+            }}
+          >
+            <SelectTrigger
+              className="h-10 min-w-44 flex-1 sm:w-56"
+              aria-label={dict.admin.filterFacilitator}
+            >
+              <SelectValue>
+                {(value) =>
+                  value === "all"
+                    ? `${dict.admin.filterFacilitator}: ${dict.admin.all}`
+                    : facilitatorLabel(value, dict)
+                }
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{dict.admin.all}</SelectItem>
+              {facilitatorsFor(type).map((option) => (
+                <SelectItem key={option} value={option}>
+                  {facilitatorLabel(option, dict)}
                 </SelectItem>
               ))}
             </SelectContent>
